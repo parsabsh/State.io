@@ -1,0 +1,3 @@
+E:/SUT/1st Semester/FOP/project/project-parsabsh/cmake-build-debug/CMakeFiles/project_parsabsh.dir
+E:/SUT/1st Semester/FOP/project/project-parsabsh/cmake-build-debug/CMakeFiles/edit_cache.dir
+E:/SUT/1st Semester/FOP/project/project-parsabsh/cmake-build-debug/CMakeFiles/rebuild_cache.dir
