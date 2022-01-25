@@ -1,0 +1,30 @@
+/*  I used this website (https://mycolor.space) to choose these colors   */
+
+main color of background :
+#512E5F
+
+parts of background :
+#5E356E 
+#442750
+
+waves of background :
+#825C91
+
+pink castles :
+#E6BBF5
+#AE85BD (center and soldiers)
+
+green castles :
+#00C9B7
+#005448 (center and soldiers)
+
+cream castles :
+#FFFADE
+#9C7855 (center and soldiers)
+
+blue castles :
+#8ABAEA
+#00264B (center and soldiers)
+
+castles outline :
+#F2ECFF

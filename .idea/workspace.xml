@@ -11,22 +11,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/music/pirates_of_caribbean.wav" afterDir="false" />
+    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="Background music added">
+      <change afterPath="$PROJECT_DIR$/images/colors.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/main_background.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/menu_login.bmp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cache-v2-52bf954a7ce52479549e.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-4f21a717f73222697f50.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-d3a1d6f10de894a92942.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2022-01-24T08-37-09-0491.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-project_parsabsh-Debug-4a2c12a7362f2138e681.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
@@ -72,16 +64,12 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\SUT\1st Semester\FOP\project\project-parsabsh\images" />
       <recent name="E:\SUT\1st Semester\FOP\project\project-parsabsh\music" />
       <recent name="E:\SUT\1st Semester\FOP\project\project-parsabsh" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="project_parsabsh" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="project_parsabsh" TARGET_NAME="project_parsabsh" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="project_parsabsh" RUN_TARGET_NAME="project_parsabsh">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -98,8 +86,19 @@
       <updated>1643013426894</updated>
       <workItem from="1643013428237" duration="447000" />
       <workItem from="1643013890593" duration="13361000" />
-      <workItem from="1643048178867" duration="8354000" />
+      <workItem from="1643048178867" duration="9243000" />
+      <workItem from="1643098109239" duration="925000" />
+      <workItem from="1643104349555" duration="753000" />
+      <workItem from="1643114906740" duration="3745000" />
     </task>
+    <task id="LOCAL-00001" summary="Background music added">
+      <created>1643059043065</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1643059043065</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,5 +117,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Background music added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Background music added" />
   </component>
 </project>
