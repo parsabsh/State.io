@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
       <config projectName="project_parsabsh" targetName="project_parsabsh" />
@@ -11,14 +14,19 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="Background music added">
-      <change afterPath="$PROJECT_DIR$/images/colors.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/main_background.bmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/menu_login.bmp" afterDir="false" />
+    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="colors were selected and background image added">
+      <change afterPath="$PROJECT_DIR$/myheaders/my_audio.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myheaders/my_audio.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-265d98eaf554d061aae5.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2022-01-24T21-11-17-0064.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-project_parsabsh-Debug-6508e77e8b684a579847.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
     </list>
@@ -60,6 +68,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
     <property name="structure.view.defaults.are.configured" value="true" />
   </component>
   <component name="RecentsManager">
@@ -89,7 +98,13 @@
       <workItem from="1643048178867" duration="9243000" />
       <workItem from="1643098109239" duration="925000" />
       <workItem from="1643104349555" duration="753000" />
-      <workItem from="1643114906740" duration="3745000" />
+      <workItem from="1643114906740" duration="5295000" />
+      <workItem from="1643206691430" duration="2246000" />
+      <workItem from="1643281905689" duration="122000" />
+      <workItem from="1643296662392" duration="32000" />
+      <workItem from="1643439732439" duration="9999000" />
+      <workItem from="1643462097591" duration="1576000" />
+      <workItem from="1643465382946" duration="590000" />
     </task>
     <task id="LOCAL-00001" summary="Background music added">
       <created>1643059043065</created>
@@ -98,7 +113,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643059043065</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="colors were selected and background image added">
+      <created>1643139819000</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1643139819000</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -118,6 +140,11 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Background music added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Background music added" />
+    <MESSAGE value="colors were selected and background image added" />
+    <option name="LAST_COMMIT_MESSAGE" value="colors were selected and background image added" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
