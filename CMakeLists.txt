@@ -8,6 +8,6 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 link_directories(${SDL2_LIB_DIR})
 
-add_executable(project_parsabsh main.c myheaders/my_audio.c)
+add_executable(project_parsabsh main.c myheaders/my_audio.c myheaders/my_text.c myheaders/my_colors.c myheaders/my_image.c)
 
-target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_gfx -mwindows)
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARY} -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_gfx -lSDL2_ttf -mwindows)

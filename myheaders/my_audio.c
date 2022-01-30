@@ -1,6 +1,13 @@
 #include "my_audio.h"
 #include <stdio.h>
 
+// definition
+Uint8 *audio_pos;
+Uint32 audio_len;
+Uint32 wav_length;
+Uint8 *wav_buffer;
+SDL_AudioSpec wav_spec;
+
 void my_audio_callback(void *userdata, Uint8 *stream, int len) {
     if (audio_len == 0) return;
     len = (len > audio_len ? (int)audio_len : len);
