@@ -28,3 +28,7 @@ blue castles :
 
 castles outline :
 #F2ECFF
+
+Neutral castles :
+#B0A8B9
+#9B89B3 (center)

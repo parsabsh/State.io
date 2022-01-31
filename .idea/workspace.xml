@@ -14,34 +14,23 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="create header file for background music">
-      <change afterPath="$PROJECT_DIR$/fonts/GILLUBCD.TTF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fonts/GILSANUB.TTF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fonts/comic.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/fonts/consola.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/login_background.bmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/menu_login_background.bmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/text_box_beautiful.bmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/text_box_simple.bmp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myheaders/my_colors.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myheaders/my_colors.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myheaders/my_image.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myheaders/my_image.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myheaders/my_text.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/myheaders/my_text.h" afterDir="false" />
+    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="login page done">
+      <change afterPath="$PROJECT_DIR$/myheaders/my_map.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myheaders/my_map.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/menu_login.bmp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/colors.txt" beforeDir="false" afterPath="$PROJECT_DIR$/images/colors.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myheaders/my_audio.c" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_audio.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myheaders/my_audio.h" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_audio.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myheaders/my_colors.c" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_colors.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myheaders/my_colors.h" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_colors.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myheaders/my_image.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/myheaders/my_image.h" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,11 +85,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="project_parsabsh" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="project_parsabsh" TARGET_NAME="project_parsabsh" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="project_parsabsh" RUN_TARGET_NAME="project_parsabsh">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -133,7 +117,10 @@
       <workItem from="1643558538483" duration="327000" />
       <workItem from="1643559346079" duration="159000" />
       <workItem from="1643564391480" duration="4194000" />
-      <workItem from="1643569705750" duration="5670000" />
+      <workItem from="1643569705750" duration="6249000" />
+      <workItem from="1643613098922" duration="4865000" />
+      <workItem from="1643624250736" duration="9833000" />
+      <workItem from="1643638395284" duration="9756000" />
     </task>
     <task id="LOCAL-00001" summary="Background music added">
       <created>1643059043065</created>
@@ -156,7 +143,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643466851296</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="login page done">
+      <created>1643576995509</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1643576995509</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,7 +172,8 @@
     <MESSAGE value="Background music added" />
     <MESSAGE value="colors were selected and background image added" />
     <MESSAGE value="create header file for background music" />
-    <option name="LAST_COMMIT_MESSAGE" value="create header file for background music" />
+    <MESSAGE value="login page done" />
+    <option name="LAST_COMMIT_MESSAGE" value="login page done" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

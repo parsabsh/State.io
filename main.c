@@ -5,6 +5,7 @@
 #include "myheaders/my_audio.h"
 #include "myheaders/my_text.h"
 #include "myheaders/my_colors.h"
+#include "myheaders/my_map.h"
 
 #ifdef main
 #undef main
@@ -13,7 +14,7 @@
 // screen dimensions
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 640
-#define FPS 60
+#define FPS 20
 
 int main(){
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0){
@@ -25,17 +26,21 @@ int main(){
     // open fonts
     load_fonts();
 
-    // create a window
-    SDL_Window *getUserNameWindow = SDL_CreateWindow("Login page", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
-
-    // create a renderer
-    SDL_Renderer *getUserNameRenderer = SDL_CreateRenderer(getUserNameWindow, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-
     // load background music
     load_music("music/pirates_of_caribbean.wav");
 
     // Start playing the background music
     SDL_PauseAudio(0);
+
+    // ----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------THE START OF LOGIN PAGE--------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------
+
+    // create a window
+    SDL_Window *getUserNameWindow = SDL_CreateWindow("Login page", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
+
+    // create a renderer
+    SDL_Renderer *getUserNameRenderer = SDL_CreateRenderer(getUserNameWindow, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
     // load menu_login background image
     SDL_Surface* surface = SDL_LoadBMP("images/login_background.bmp");
@@ -59,7 +64,6 @@ int main(){
     SDL_bool is_open = SDL_TRUE;
     while(is_open){
         SDL_RenderClear(getUserNameRenderer);
-
         while(SDL_PollEvent(&event)){
             // close the window
             if(event.type == SDL_QUIT){
@@ -76,13 +80,53 @@ int main(){
         SDL_RenderCopy(getUserNameRenderer, text_box_texture, NULL, &text_box_rect);
         print_text(consola_font, user_name, CASTLE_OUTLINE_COLOR, getUserNameRenderer, &userNameInput_rect);
         SDL_RenderPresent(getUserNameRenderer);
-        SDL_Delay(1000/20);
+        SDL_Delay(1000/FPS);
     }
-
     SDL_StopTextInput();
     // close the login window
+    SDL_DestroyTexture(menu_login_texture);
+    SDL_DestroyTexture(text_box_texture);
     SDL_DestroyWindow(getUserNameWindow);
     SDL_DestroyRenderer(getUserNameRenderer);
+
+    // ----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------THE END OF LOGIN PAGE----------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------
+
+    // ----------------------------------------------------------------------------------------------------------
+    // ---------------------------------------START OF THE MAIN GAME---------------------------------------------
+    // ----------------------------------------------------------------------------------------------------------
+
+    // create a window
+    SDL_Window *mainWindow = SDL_CreateWindow("State.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,SCREEN_WIDTH,SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
+
+    // create a renderer
+    SDL_Renderer *mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+
+    // load menu_login background image
+    SDL_Surface* main_background_surface = SDL_LoadBMP("images/main_background.bmp");
+    SDL_Texture* main_background_texture = SDL_CreateTextureFromSurface(mainRenderer, main_background_surface);
+    SDL_FreeSurface(main_background_surface); // free the surface because we don't need it anymore
+
+    // generate a random map
+    castle* castles = NULL;
+    castles = generate_random_map(4, 20);
+
+    is_open = SDL_TRUE;
+    while(is_open){
+        SDL_RenderClear(mainRenderer);
+        while(SDL_PollEvent(&event)) {
+            // close the window
+            if (event.type == SDL_QUIT) {
+                is_open = SDL_FALSE;
+                break;
+            }
+        }
+        SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
+        render_map(castles, 20, mainRenderer);
+        SDL_RenderPresent(mainRenderer);
+        SDL_Delay(1000/FPS);
+    }
 
     // shut everything down
     SDL_CloseAudio(); // stop plating the background music
