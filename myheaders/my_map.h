@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #define CENTER_RADIUS 18
+#define START_NUMBER_OF_SOLDIERS 50
 
 typedef struct castle{
     // coordinates of the castle (these will be selected randomly)
@@ -28,3 +29,5 @@ extern int default_y_coordinates[26];
 castle* generate_random_map(int number_of_players, int number_of_castles);
 
 void render_map(castle* castles, int number_of_castles, SDL_Renderer* renderer);
+
+void increment_soldiers(int time, castle* castles, int fps, int rate, int number_of_castles);

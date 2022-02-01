@@ -2,6 +2,8 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <time.h>
 #include <stdlib.h>
+#include "my_text.h"
+#include "my_colors.h"
 
 // check if the element is in the array with length i
 int is_in(int element, int array[], int i){
@@ -12,7 +14,7 @@ int is_in(int element, int array[], int i){
     return 0;
 }
 
-// chooses n numbers in the interval [start, end] and store them in the array
+// chooses n random numbers in the interval [start, end] and store them in the array
 void random_number_range(int n, int start, int end, int array[]){
     srand(time(0));
     for(int i=0; i<n; i++){
@@ -23,6 +25,16 @@ void random_number_range(int n, int start, int end, int array[]){
             i--;
         }
     }
+}
+
+// returns the number of digits of a number
+int digits_of(int a){
+    int result = 0;
+    while(a > 0){
+        a /= 10;
+        result++;
+    }
+    return result;
 }
 
 int default_x_coordinates[26] = {85, 230, 375, 525, 680, 827, 974,
@@ -45,7 +57,7 @@ castle* generate_random_map(int number_of_players, int number_of_castles){
         castles[i].center_x = default_x_coordinates[selected_castles_index[i]];
         castles[i].center_y = default_y_coordinates[selected_castles_index[i]];
         castles[i].player = -1;
-        castles[i].soldiers = 50;
+        castles[i].soldiers = START_NUMBER_OF_SOLDIERS;
         castles[i].radius = (rand()%31) + 40;
         castles[i].color = 0x88B9A8B0;
         castles[i].center_color = 0x88B3899B;
@@ -74,14 +86,35 @@ castle* generate_random_map(int number_of_players, int number_of_castles){
             default:
                 break;
         }
-
     }
     return castles;
 }
 
 void render_map(castle* castles, int number_of_castles, SDL_Renderer* renderer){
     for(int i=0; i < number_of_castles; i++){
+
         filledCircleColor(renderer, castles[i].center_x, castles[i].center_y, castles[i].radius, castles[i].color);
         filledCircleColor(renderer, castles[i].center_x, castles[i].center_y, CENTER_RADIUS, castles[i].center_color);
+
+        char number_of_soldiers[4];
+        itoa(castles[i].soldiers, number_of_soldiers, 10);
+
+        SDL_Rect* rectangle;
+        rectangle->y = castles[i].center_y - 10;
+        rectangle->h = 20;
+        rectangle->w = 10 * digits_of(castles[i].soldiers);
+        rectangle->x = castles[i].center_x - (rectangle->w / 2);
+
+        print_text(consola_font, number_of_soldiers, CASTLE_OUTLINE_COLOR, renderer, rectangle);
+    }
+}
+
+void increment_soldiers(int time, castle* castles, int fps, int rate, int number_of_castles){
+    if((time % (fps/rate)) == 0){
+        for(int i=0; i<number_of_castles; i++){
+            if(castles[i].player != -1 && castles[i].soldiers < 150){
+                castles[i].soldiers++;
+            }
+        }
     }
 }

@@ -1,6 +1,4 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL2_gfxPrimitives.h>
-#include <string.h>
 #include <SDL2/SDL_ttf.h>
 #include "myheaders/my_audio.h"
 #include "myheaders/my_text.h"
@@ -15,6 +13,9 @@
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 640
 #define FPS 20
+
+// Unit : soldiers per second
+#define RATE_OF_SOLDIERS_INCREMENT 3
 
 int main(){
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0){
@@ -108,10 +109,15 @@ int main(){
     SDL_Texture* main_background_texture = SDL_CreateTextureFromSurface(mainRenderer, main_background_surface);
     SDL_FreeSurface(main_background_surface); // free the surface because we don't need it anymore
 
+    // variables
+    int number_of_players = 4;
+    int number_of_castles = 20;
+
     // generate a random map
     castle* castles = NULL;
-    castles = generate_random_map(4, 20);
+    castles = generate_random_map(number_of_players, number_of_castles);
 
+    int time = 0; // a variable that shows the time (value = FPS * seconds)
     is_open = SDL_TRUE;
     while(is_open){
         SDL_RenderClear(mainRenderer);
@@ -122,8 +128,10 @@ int main(){
                 break;
             }
         }
+        time++;
+        increment_soldiers(time, castles, FPS, RATE_OF_SOLDIERS_INCREMENT, number_of_castles);
         SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
-        render_map(castles, 20, mainRenderer);
+        render_map(castles, number_of_castles, mainRenderer);
         SDL_RenderPresent(mainRenderer);
         SDL_Delay(1000/FPS);
     }
