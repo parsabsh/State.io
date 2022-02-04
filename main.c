@@ -44,15 +44,17 @@ int main(){
     SDL_Renderer *getUserNameRenderer = SDL_CreateRenderer(getUserNameWindow, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
     // load menu_login background image
-    SDL_Surface* surface = SDL_LoadBMP("images/login_background.bmp");
-    SDL_Texture* menu_login_texture = SDL_CreateTextureFromSurface(getUserNameRenderer, surface);
-    SDL_FreeSurface(surface); // free the surface because we don't need it anymore
+    SDL_Surface* surface1 = SDL_LoadBMP("images/login_background.bmp");
+    SDL_Texture* menu_login_texture = SDL_CreateTextureFromSurface(getUserNameRenderer, surface1);
+    SDL_FreeSurface(surface1); // free the surface because we don't need it anymore
+    surface1 = NULL;
 
     // load text box for input username
     SDL_Surface* surface2 = SDL_LoadBMP("images/text_box_simple.bmp");
     SDL_Texture* text_box_texture = SDL_CreateTextureFromSurface(getUserNameRenderer, surface2);
     SDL_FreeSurface(surface2); // free the surface because we don't need it anymore
     SDL_Rect text_box_rect = {390, 280, 300, 80};
+    surface2 = NULL;
 
     // username input variables
     SDL_Rect userNameInput_rect = {530, 300, 20, 40};
@@ -95,7 +97,7 @@ int main(){
     // ----------------------------------------------------------------------------------------------------------
 
     // ----------------------------------------------------------------------------------------------------------
-    // ---------------------------------------START OF THE MAIN GAME---------------------------------------------
+    // ---------------------------------START OF THE MAIN MENU + MAIN GAME---------------------------------------
     // ----------------------------------------------------------------------------------------------------------
 
     // create a window
@@ -104,37 +106,55 @@ int main(){
     // create a renderer
     SDL_Renderer *mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
-    // load menu_login background image
+    // load menu background image
+    SDL_Surface* surface3 = SDL_LoadBMP("images/menu_background.bmp");
+    SDL_Texture* menu_texture = SDL_CreateTextureFromSurface(mainRenderer, surface3);
+    SDL_FreeSurface(surface3); // free the surface because we don't need it anymore
+
+    // load main game background image
     SDL_Surface* main_background_surface = SDL_LoadBMP("images/main_background.bmp");
     SDL_Texture* main_background_texture = SDL_CreateTextureFromSurface(mainRenderer, main_background_surface);
     SDL_FreeSurface(main_background_surface); // free the surface because we don't need it anymore
 
-    // variables
-    int number_of_players = 4;
-    int number_of_castles = 20;
+    SDL_Rect quick_rect;
+    SDL_Rect scoreboard_rect;
+    SDL_Rect quit_rect;
+    evaluate_menu_rects(&quick_rect, &scoreboard_rect, &quit_rect);
 
-    // generate a random map
-    castle* castles = NULL;
-    castles = generate_random_map(number_of_players, number_of_castles);
-
-    int time = 0; // a variable that shows the time (value = FPS * seconds)
-    is_open = SDL_TRUE;
-    while(is_open){
-        SDL_RenderClear(mainRenderer);
-        while(SDL_PollEvent(&event)) {
-            // close the window
-            if (event.type == SDL_QUIT) {
-                is_open = SDL_FALSE;
-                break;
-            }
+    while(1){
+        // variables
+        int number_of_players;
+        int number_of_castles;
+        int points_of_players[4][2] = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
+        castle* castles = show_menu(mainRenderer, &quick_rect, &scoreboard_rect, &quit_rect, menu_texture, &number_of_players, &number_of_castles, points_of_players, user_name);
+        if(castles == NULL){
+            break;
         }
-        time++;
-        increment_soldiers(time, castles, FPS, RATE_OF_SOLDIERS_INCREMENT, number_of_castles);
-        SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
-        render_map(castles, number_of_castles, mainRenderer);
-        SDL_RenderPresent(mainRenderer);
-        SDL_Delay(1000/FPS);
+        int time = 0; // a variable that shows the time (value = FPS * seconds)
+        is_open = SDL_TRUE;
+        while(is_open){
+            SDL_RenderClear(mainRenderer);
+            while(SDL_PollEvent(&event)) {
+                // close the window
+                if (event.type == SDL_QUIT) {
+                    is_open = SDL_FALSE;
+                    break;
+                }
+            }
+            time++;
+            check_music_finished();
+            increment_soldiers(time, castles, FPS, RATE_OF_SOLDIERS_INCREMENT, number_of_castles);
+            SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
+            render_map(castles, number_of_castles, mainRenderer);
+            SDL_RenderPresent(mainRenderer);
+            SDL_Delay(1000/FPS);
+        }
     }
+
+    SDL_DestroyTexture(main_background_texture);
+    SDL_DestroyTexture(menu_texture);
+    SDL_DestroyWindow(mainWindow);
+    SDL_DestroyRenderer(mainRenderer);
 
     // shut everything down
     SDL_CloseAudio(); // stop plating the background music
