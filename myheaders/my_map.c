@@ -341,11 +341,6 @@ castle* random_map_menu(SDL_Renderer* renderer, int* number_of_players, int* num
         itoa(*number_of_castles, castles, 10);
         print_text(comic_font, players, PINK_CASTLE_COLOR, renderer, &players_rect);
         print_text(comic_font, castles, PINK_CASTLE_COLOR, renderer, &castles_rect);
-        SDL_RenderDrawRect(renderer, &player_minus);
-        SDL_RenderDrawRect(renderer, &player_plus);
-        SDL_RenderDrawRect(renderer, &castle_minus);
-        SDL_RenderDrawRect(renderer, &castle_plus);
-        SDL_RenderDrawRect(renderer, &generate_rect);
         SDL_RenderPresent(renderer);
         SDL_Delay(1000/20);
     }
