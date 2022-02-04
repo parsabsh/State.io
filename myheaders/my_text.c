@@ -2,14 +2,10 @@
 
 TTF_Font* comic_font;
 TTF_Font* consola_font;
-TTF_Font* gill_sans_condensed_font;
-TTF_Font* gill_sans_ultra_bold_font;
 
 void load_fonts(){
     comic_font = TTF_OpenFont("fonts/comic.ttf", 32);
     consola_font = TTF_OpenFont("fonts/consola.ttf", 32);
-    gill_sans_condensed_font = TTF_OpenFont("fonts/GILLUBCD.ttf", 32);
-    gill_sans_ultra_bold_font = TTF_OpenFont("fonts/GILSANUB.ttf", 32);
 }
 
 void print_text(TTF_Font* font, char* text, SDL_Color color, SDL_Renderer* renderer, SDL_Rect* rect){

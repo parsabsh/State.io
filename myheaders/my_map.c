@@ -1,9 +1,11 @@
 #include "my_map.h"
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include "my_text.h"
 #include "my_colors.h"
+#include "my_audio.h"
 
 // check if the element is in the array with length i
 int is_in(int element, int array[], int i){
@@ -105,16 +107,337 @@ void render_map(castle* castles, int number_of_castles, SDL_Renderer* renderer){
         rectangle->w = 10 * digits_of(castles[i].soldiers);
         rectangle->x = castles[i].center_x - (rectangle->w / 2);
 
-        print_text(consola_font, number_of_soldiers, CASTLE_OUTLINE_COLOR, renderer, rectangle);
+        print_text(comic_font, number_of_soldiers, CASTLE_OUTLINE_COLOR, renderer, rectangle);
     }
 }
 
 void increment_soldiers(int time, castle* castles, int fps, int rate, int number_of_castles){
     if((time % (fps/rate)) == 0){
         for(int i=0; i<number_of_castles; i++){
-            if(castles[i].player != -1 && castles[i].soldiers < 150){
+            if(castles[i].player != -1 && castles[i].soldiers < MAXIMUM_NUMBER_OF_SOLDIERS){
                 castles[i].soldiers++;
             }
         }
     }
+}
+
+int click_in_rect(SDL_Event event, SDL_Rect rect){
+    if(event.button.x > rect.x && event.button.x < rect.x+rect.w
+    && event.button.y > rect.y && event.button.y < rect.y+rect.h){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+void sort(int points_of_players[4][2]){
+    for (int pass = 1; pass < 4; pass++) {
+        for (int i = 0; i < 3; i++){
+            if (points_of_players[i][1] < points_of_players[i + 1][1]) {
+                int hold[2];
+                hold[0] = points_of_players[i][0];
+                hold[1] = points_of_players[i][1];
+                points_of_players[i][0] = points_of_players[i + 1][0];
+                points_of_players[i][1] = points_of_players[i + 1][1];
+                points_of_players[i + 1][0] = hold[0];
+                points_of_players[i + 1][1] = hold[1];
+            }
+        }
+    }
+}
+
+void unsort(int points_of_players[4][2]){
+    for (int pass = 1; pass < 4; pass++) {
+        for (int i = 0; i < 3; i++){
+            if (points_of_players[i][0] < points_of_players[i + 1][0]) {
+                int hold[2];
+                hold[0] = points_of_players[i][0];
+                hold[1] = points_of_players[i][1];
+                points_of_players[i][0] = points_of_players[i + 1][0];
+                points_of_players[i][1] = points_of_players[i + 1][1];
+                points_of_players[i + 1][0] = hold[0];
+                points_of_players[i + 1][1] = hold[1];
+            }
+        }
+    }
+}
+
+void show_scoreboard(int points_of_players[4][2], SDL_Renderer* renderer, char username[]){
+    sort(points_of_players);
+    SDL_Surface* surface = SDL_LoadBMP("images/scoreboard_background.bmp");
+    SDL_Texture* background = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface); surface = NULL;
+    SDL_Rect quit_rect = {903, 548, 177, 92};
+    char first_text[20];
+    char second_text[20];
+    char third_text[20];
+    char fourth_text[20];
+    SDL_Rect first_place, second_place, third_place, fourth_place;
+    first_place.y = 176;
+    second_place.y = 276;
+    third_place.y = 376;
+    fourth_place.y = 476;
+    first_place.x = 250;
+    second_place.x = 250;
+    third_place.x = 250;
+    fourth_place.x = 250;
+    first_place.h = 40;
+    second_place.h = 40;
+    third_place.h = 40;
+    fourth_place.h = 40;
+    switch(points_of_players[0][0]){
+        case 0:
+            sprintf(first_text, "%s (blue castles) : %d", username, points_of_players[0][1]);
+            first_place.w = strlen(first_text)*17;
+            break;
+        case 1:
+            sprintf(first_text, "Player 1 (green castles) : %d", points_of_players[0][1]);
+            first_place.w = strlen(first_text)*17;
+            break;
+        case 2:
+            sprintf(first_text, "Player 2 (cream castles) : %d", points_of_players[0][1]);
+            first_place.w = strlen(first_text)*17;
+            break;
+        case 3:
+            sprintf(first_text, "Player 3 (pink castles) : %d", points_of_players[0][1]);
+            first_place.w = strlen(first_text)*17;
+            break;
+    }
+    switch(points_of_players[1][0]){
+        case 0:
+            sprintf(second_text, "%s (blue castles) : %d", username, points_of_players[1][1]);
+            first_place.w = strlen(second_text)*17;
+            break;
+        case 1:
+            sprintf(second_text, "Player 1 (green castles) : %d", points_of_players[1][1]);
+            second_place.w = strlen(second_text)*17;
+            break;
+        case 2:
+            sprintf(second_text, "Player 2 (cream castles) : %d", points_of_players[1][1]);
+            second_place.w = strlen(second_text)*17;
+            break;
+        case 3:
+            sprintf(second_text, "Player 3 (pink castles) : %d", points_of_players[1][1]);
+            second_place.w = strlen(second_text)*17;
+            break;
+    }
+    switch(points_of_players[2][0]){
+        case 0:
+            sprintf(third_text, "%s (blue castles) : %d", username, points_of_players[2][1]);
+            third_place.w = strlen(third_text)*17;
+            break;
+        case 1:
+            sprintf(third_text, "Player 1 (green castles) : %d", points_of_players[2][1]);
+            third_place.w = strlen(third_text)*17;
+            break;
+        case 2:
+            sprintf(third_text, "Player 2 (cream castles) : %d", points_of_players[2][1]);
+            third_place.w = strlen(third_text)*17;
+            break;
+        case 3:
+            sprintf(third_text, "Player 3 (pink castles) : %d", points_of_players[2][1]);
+            third_place.w = strlen(third_text)*17;
+            break;
+    }
+    switch(points_of_players[3][0]){
+        case 0:
+            sprintf(fourth_text, "%s (blue castles) : %d", username, points_of_players[3][1]);
+            fourth_place.w = strlen(fourth_text)*17;
+            break;
+        case 1:
+            sprintf(fourth_text, "Player 1 (green castles) : %d", points_of_players[3][1]);
+            fourth_place.w = strlen(fourth_text)*17;
+            break;
+        case 2:
+            sprintf(fourth_text, "Player 2 (cream castles) : %d", points_of_players[3][1]);
+            fourth_place.w = strlen(fourth_text)*17;
+            break;
+        case 3:
+            sprintf(fourth_text, "Player 3 (pink castles) : %d", points_of_players[3][1]);
+            fourth_place.w = strlen(fourth_text)*17;
+            break;
+    }
+    SDL_Event event;
+    SDL_bool is_open = SDL_TRUE;
+    while(is_open){
+        SDL_RenderClear(renderer);
+        while(SDL_PollEvent(&event)){
+            if (event.type == SDL_QUIT) {
+                is_open = SDL_FALSE;
+                break;
+            }
+            if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+                if (click_in_rect(event, quit_rect)) {
+                    is_open = SDL_FALSE;
+                    break;
+                }
+            }
+        }
+        check_music_finished();
+        SDL_RenderCopy(renderer, background, NULL, NULL);
+        print_text(comic_font, first_text, GREEN_CASTLE_COLOR, renderer, &first_place);
+        print_text(comic_font, second_text, GREEN_CASTLE_COLOR, renderer, &second_place);
+        print_text(comic_font, third_text, GREEN_CASTLE_COLOR, renderer, &third_place);
+        print_text(comic_font, fourth_text, GREEN_CASTLE_COLOR, renderer, &fourth_place);
+        SDL_RenderPresent(renderer);
+    }
+    unsort(points_of_players);
+}
+
+castle* random_map_menu(SDL_Renderer* renderer, int* number_of_players, int* number_of_castles, SDL_Texture* background){
+    *number_of_players = 2;
+    *number_of_castles = 3;
+    SDL_Rect players_rect = {573, 228, 20, 40};
+    SDL_Rect castles_rect = {573, 375, 20, 40};
+
+    SDL_Rect quit_rect = {903, 548, 177, 92};
+    SDL_Rect player_minus = {857, 217, 52, 52};
+    SDL_Rect player_plus = {925, 217, 52, 52};
+    SDL_Rect castle_minus = {857, 367, 52, 52};
+    SDL_Rect castle_plus = {925, 367, 52, 52};
+    SDL_Rect generate_rect = {350, 500, 378, 88};
+
+    SDL_Event event;
+    while(1){
+        SDL_RenderClear(renderer);
+        while(SDL_PollEvent(&event)){
+            if(event.type == SDL_QUIT){
+                return NULL;
+            }
+            if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                if(click_in_rect(event, quit_rect)){
+                    return NULL;
+                }
+                if(click_in_rect(event, player_minus)){
+                    if(*number_of_players > 2)
+                        (*number_of_players)--;
+                }
+                if(click_in_rect(event, player_plus)){
+                    if(*number_of_players < 4)
+                        (*number_of_players)++;
+                }
+                if(click_in_rect(event, castle_minus)){
+                    if(*number_of_castles > 3)
+                        (*number_of_castles)--;
+                }
+                if(click_in_rect(event, castle_plus)){
+                    if(*number_of_castles < 26)
+                        (*number_of_castles)++;
+                }
+                if(click_in_rect(event, generate_rect)){
+                    castle* castles = generate_random_map(*number_of_players, *number_of_castles);
+                    if(castles != NULL){
+                        return castles;
+                    }
+                }
+            }
+        }
+        check_music_finished();
+        SDL_RenderCopy(renderer, background, NULL, NULL);
+        castles_rect.w = digits_of(*number_of_castles)*20;
+        char players[2];
+        itoa(*number_of_players, players, 10);
+        char castles[3];
+        itoa(*number_of_castles, castles, 10);
+        print_text(comic_font, players, PINK_CASTLE_COLOR, renderer, &players_rect);
+        print_text(comic_font, castles, PINK_CASTLE_COLOR, renderer, &castles_rect);
+        SDL_RenderDrawRect(renderer, &player_minus);
+        SDL_RenderDrawRect(renderer, &player_plus);
+        SDL_RenderDrawRect(renderer, &castle_minus);
+        SDL_RenderDrawRect(renderer, &castle_plus);
+        SDL_RenderDrawRect(renderer, &generate_rect);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000/20);
+    }
+}
+
+castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int* number_of_castles){
+    SDL_Surface* surface = SDL_LoadBMP("images/choose_map_background.bmp");
+    SDL_Texture* choose_map_background = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface); surface = NULL;
+    SDL_Surface* surface1 = SDL_LoadBMP("images/random_map_background.bmp");
+    SDL_Texture* random_map_background = SDL_CreateTextureFromSurface(renderer, surface1);
+    SDL_FreeSurface(surface1); surface1 = NULL;
+    SDL_Rect quit_rect = {903, 548, 177, 92};
+    SDL_Rect default_maps_rect = {374, 179, 330, 246};
+    SDL_Rect random_map_rect = {352, 460, 374, 58};
+    SDL_Event event;
+    while(1){
+        SDL_RenderClear(renderer);
+        while(SDL_PollEvent(&event)){
+            if(event.type == SDL_QUIT){
+                return NULL;
+            }
+            if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                if(click_in_rect(event, quit_rect)){
+                    return NULL;
+                }
+                if(click_in_rect(event, default_maps_rect)){
+                    *number_of_players = 4;
+                    *number_of_castles = 20;
+                    castle* castles =  generate_random_map(4, 20);
+                    if(castles != NULL){
+                        return castles;
+                    }
+                }
+                if(click_in_rect(event, random_map_rect)){
+                    castle* castles = random_map_menu(renderer, number_of_players, number_of_castles, random_map_background);
+                    if(castles != NULL){
+                        return castles;
+                    }
+                }
+            }
+        }
+        check_music_finished();
+        SDL_RenderCopy(renderer, choose_map_background, NULL, NULL);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000/20);
+    }
+}
+
+castle* show_menu(SDL_Renderer* renderer, SDL_Rect* quick_game_rect,SDL_Rect* scoreboard_rect, SDL_Rect* quit_rect, SDL_Texture* background, int* number_of_players, int* number_of_castles, int points_of_players[4][2], char username[]){
+    SDL_Event event;
+    while(1){
+        SDL_RenderClear(renderer);
+        while(SDL_PollEvent(&event)){
+            if(event.type == SDL_QUIT){
+                return NULL;
+            }
+            if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                if(click_in_rect(event, *quit_rect)){
+                    return NULL;
+                }
+                if(click_in_rect(event, *scoreboard_rect)){
+                    show_scoreboard(points_of_players, renderer, username);
+                }
+                if(click_in_rect(event, *quick_game_rect)){
+                    castle* castles = show_random_map_menu(renderer, number_of_players, number_of_castles);
+                    if(castles != NULL){
+                        return castles;
+                    }
+                }
+            }
+        }
+        check_music_finished();
+        SDL_RenderCopy(renderer, background, NULL, NULL);
+        SDL_RenderPresent(renderer);
+        SDL_Delay(1000/20);
+    }
+}
+
+void evaluate_menu_rects(SDL_Rect* quick_game_rect, SDL_Rect* scoreboard_rect, SDL_Rect* quit_rect){
+    quick_game_rect->y = 228;
+    quick_game_rect->h = 92;
+    quick_game_rect->x = 262;
+    quick_game_rect->w = 598;
+
+    scoreboard_rect->y = 366;
+    scoreboard_rect->h = 70;
+    scoreboard_rect->x = 358;
+    scoreboard_rect->w = 405;
+
+    quit_rect->y = 484;
+    quit_rect->h = 82;
+    quit_rect->x = 477;
+    quit_rect->w = 157;
 }
