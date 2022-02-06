@@ -25,6 +25,9 @@ typedef struct castle{
 
     // the number of soldiers that have destination
     int soldiers_with_destination;
+
+    int soldiers_with_destination_2;
+    int soldiers_with_destination_3;
 } castle;
 
 // default coordinates of castles' center

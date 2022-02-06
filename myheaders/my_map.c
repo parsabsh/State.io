@@ -32,6 +32,7 @@ void random_number_range(int n, int start, int end, int array[]){
 
 // returns the number of digits of a number
 int digits_of(int a){
+    if(a == 0) return 1;
     int result = 0;
     while(a > 0){
         a /= 10;
@@ -62,6 +63,8 @@ castle* generate_random_map(int number_of_players, int number_of_castles){
         castles[i].player = -1;
         castles[i].soldiers = START_NUMBER_OF_SOLDIERS;
         castles[i].soldiers_with_destination = 0;
+        castles[i].soldiers_with_destination_2 = 0;
+        castles[i].soldiers_with_destination_3 = 0;
         castles[i].radius = (rand()%31) + 40;
         castles[i].color = 0x88B9A8B0;
         castles[i].center_color = 0x88B3899B;
@@ -478,7 +481,13 @@ void create_new_soldier(castle* source, castle* destination, soldier** soldiers,
     (*soldiers)[number_of_moving_soldiers].y = source->center_y;
     (*soldiers)[number_of_moving_soldiers].speed = speed;
     (*soldiers)[number_of_moving_soldiers].player = source->player;
-    source->soldiers_with_destination--;
+    if(source->soldiers_with_destination != 0){
+        source->soldiers_with_destination--;
+    }else if(source->soldiers_with_destination_2 != 0){
+        source->soldiers_with_destination_2--;
+    }else if(source->soldiers_with_destination_3 != 0){
+        source->soldiers_with_destination_3--;
+    }
     source->soldiers--;
 }
 
@@ -488,8 +497,8 @@ void send_one_soldier(soldier* the_soldier){
         int y_distance = (the_soldier->destination->center_y - the_soldier->y);
         double length = sqrt((the_soldier->destination->center_y - the_soldier->y)*(the_soldier->destination->center_y - the_soldier->y)
                               + (the_soldier->destination->center_x - the_soldier->x)*(the_soldier->destination->center_x - the_soldier->x));
-        the_soldier->x += (x_distance / (double)length) * the_soldier->speed;
-        the_soldier->y += (y_distance / (double)length) * the_soldier->speed;
+        the_soldier->x += (int)((x_distance / length) * the_soldier->speed);
+        the_soldier->y += (int)((y_distance / length) * the_soldier->speed);
 
         // if it arrives
         if (the_soldier->x < the_soldier->destination->center_x + CENTER_RADIUS && the_soldier->x > the_soldier->destination->center_x - CENTER_RADIUS
@@ -498,8 +507,13 @@ void send_one_soldier(soldier* the_soldier){
                 the_soldier->destination->soldiers++;
             } else {
                 if (the_soldier->destination->soldiers != 0) {
-                    if(the_soldier->destination->soldiers == the_soldier->destination->soldiers_with_destination){
+                    if(the_soldier->destination->soldiers == the_soldier->destination->soldiers_with_destination + the_soldier->destination->soldiers_with_destination_2 + the_soldier->destination->soldiers_with_destination_3){
+                        if(the_soldier->destination->soldiers_with_destination != 0)
                         the_soldier->destination->soldiers_with_destination--;
+                        else if(the_soldier->destination->soldiers_with_destination_2 != 0)
+                            the_soldier->destination->soldiers_with_destination_2--;
+                        else if(the_soldier->destination->soldiers_with_destination_3 != 0)
+                            the_soldier->destination->soldiers_with_destination_3--;
                     }
                     the_soldier->destination->soldiers--;
                 }else{
@@ -516,6 +530,8 @@ void send_one_soldier(soldier* the_soldier){
 
 void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_moving_soldiers){
     for(int i=0; i<number_of_moving_soldiers; i++){
-        filledCircleColor(renderer, soldiers[i].x, soldiers[i].y, soldiers[i].radius, soldiers[i].source->center_color);
+        if(soldiers[i].radius != 0){
+            filledCircleColor(renderer, soldiers[i].x, soldiers[i].y, soldiers[i].radius, soldiers[i].source->center_color);
+        }
     }
 }

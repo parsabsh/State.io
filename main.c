@@ -16,7 +16,7 @@
 #define FPS 20
 
 // Unit : soldiers per second
-#define RATE_OF_SOLDIERS_INCREMENT 1
+#define RATE_OF_SOLDIERS_INCREMENT 2
 // Unit : pixels per second
 #define DEFAULT_SPEED_OF_SOLDIERS 5
 
@@ -136,9 +136,9 @@ int main(){
         int time = 0; // a variable that shows the time (value = FPS * seconds)
         SDL_bool is_source_selected = SDL_FALSE;
         SDL_bool is_destination_selected = SDL_FALSE;
-        castle* source_castle[26] = {NULL};
+        castle** source_castle = malloc(sizeof(castle*));
         int number_of_sources = 0;
-        castle* destination_castle[26] = {NULL};
+        castle** destination_castle = malloc(sizeof(castle*));
         int number_of_destinations = 0;
         int number_of_moving_soldiers = 0;
         int number_of_done_motions = 0;
@@ -157,14 +157,22 @@ int main(){
                         if(source_castle[number_of_sources] != NULL && source_castle[number_of_sources]->player == 0){
                             is_source_selected = SDL_TRUE;
                             number_of_sources++;
+                            source_castle = realloc(source_castle, (number_of_sources+1) * sizeof(castle*));
                         }
                     }else{
                         destination_castle[number_of_destinations] = click_on_castle(event, castles, number_of_castles);
                         if(destination_castle[number_of_destinations] != NULL && destination_castle[number_of_destinations]->center_x != source_castle[number_of_sources-1]->center_x){
                             is_source_selected = SDL_FALSE;
                             is_destination_selected = SDL_TRUE;
-                            source_castle[number_of_sources-1]->soldiers_with_destination = source_castle[number_of_sources-1]->soldiers - source_castle[number_of_sources-1]->soldiers_with_destination;
+                            if(source_castle[number_of_sources-1]->soldiers_with_destination == 0){
+                                source_castle[number_of_sources-1]->soldiers_with_destination = source_castle[number_of_sources-1]->soldiers;
+                            }else if(source_castle[number_of_sources-1]->soldiers_with_destination_2 == 0){
+                                source_castle[number_of_sources-1]->soldiers_with_destination_2 = source_castle[number_of_sources-1]->soldiers - source_castle[number_of_sources-1]->soldiers_with_destination;
+                            }else if(source_castle[number_of_sources-1]->soldiers_with_destination_3 == 0){
+                                source_castle[number_of_sources-1]->soldiers_with_destination_3 = source_castle[number_of_sources-1]->soldiers - source_castle[number_of_sources-1]->soldiers_with_destination - source_castle[number_of_sources-1]->soldiers_with_destination_2;
+                            }
                             number_of_destinations++;
+                            destination_castle = realloc(destination_castle, (number_of_destinations+1) * sizeof(castle *));
                         }
                     }
                 }
@@ -176,18 +184,30 @@ int main(){
             if(is_source_selected){
                 circleColor(mainRenderer, source_castle[number_of_sources-1]->center_x, source_castle[number_of_sources-1]->center_y, source_castle[number_of_sources-1]->radius + 2, 0xFF0089E5);
             }
-            if(is_destination_selected && time % 5 == 0){
-                for(int i=number_of_done_motions; i<number_of_sources; i++){
+            if(is_destination_selected && time % 3 == 0){
+                for(int i=number_of_done_motions; i<number_of_destinations; i++){
                     if(source_castle[i]->soldiers_with_destination > 0){
                         create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
                         if(source_castle[i]->soldiers_with_destination == 0){
-                            number_of_done_motions = i+1;
+                            number_of_done_motions++;
+                        }
+                    }
+                    else if(source_castle[i]->soldiers_with_destination_2 > 0){
+                        create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
+                        if(source_castle[i]->soldiers_with_destination_2 == 0){
+                            number_of_done_motions++;
+                        }
+                    }
+                    else if(source_castle[i]->soldiers_with_destination_3 > 0){
+                        create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
+                        if(source_castle[i]->soldiers_with_destination_3 == 0){
+                            number_of_done_motions++;
                         }
                     }
                 }
             }
             for(int i=0; i<number_of_moving_soldiers; i++){
-                send_one_soldier(soldiers+i);
+                send_one_soldier(&soldiers[i]);
             }
             render_map(castles, number_of_castles, mainRenderer);
             render_soldiers(mainRenderer, soldiers, number_of_moving_soldiers);
