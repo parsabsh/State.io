@@ -1,7 +1,8 @@
 #include <SDL2/SDL.h>
 #define CENTER_RADIUS 18
-#define START_NUMBER_OF_SOLDIERS 30
-#define MAXIMUM_NUMBER_OF_SOLDIERS 150
+#define START_NUMBER_OF_SOLDIERS 20
+#define MAXIMUM_NUMBER_OF_SOLDIERS 120
+#define SOLDIER_RADIUS 5
 
 typedef struct castle{
     // coordinates of the castle (these will be selected randomly)
@@ -21,6 +22,9 @@ typedef struct castle{
 
     // the number of soldiers in the castle
     int soldiers;
+
+    // the number of soldiers that have destination
+    int soldiers_with_destination;
 } castle;
 
 // default coordinates of castles' center
@@ -33,6 +37,10 @@ void render_map(castle* castles, int number_of_castles, SDL_Renderer* renderer);
 
 void increment_soldiers(int time, castle* castles, int fps, int rate, int number_of_castles);
 
+int digits_of(int a);
+
+int click_in_rect(SDL_Event event, SDL_Rect rect);
+
 castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int* number_of_castles);
 
 castle* show_menu(SDL_Renderer* renderer,SDL_Rect* quick_game_rect, SDL_Rect* Scoreboard_rect, SDL_Rect* quit_rect,
@@ -43,3 +51,29 @@ void evaluate_menu_rects(SDL_Rect* quick_game_rect, SDL_Rect* Scoreboard_rect, S
 void show_scoreboard(int points_of_players[4][2], SDL_Renderer* renderer, char username[]);
 
 castle* random_map_menu(SDL_Renderer* renderer, int* number_of_players, int* number_of_castles, SDL_Texture* background);
+
+typedef struct soldier{
+    int x;
+    int y;
+    int radius;
+    /*
+     0 : user (blue)
+     1 : player 1 (green)
+     2 : player 2 (cream)
+     3 : player 3 (pink)
+    */
+    int player;
+
+    castle* source;
+    castle* destination;
+    int speed;
+}soldier;
+
+// returns the castle that is clicked on, and returns NULL if you clicked on areas that don't have castles
+castle* click_on_castle(SDL_Event event, castle* castles, int number_of_castles);
+
+void create_new_soldier(castle* source, castle* destination, soldier** soldiers, int number_of_moving_soldiers, int speed);
+
+void send_one_soldier(soldier* the_soldier);
+
+void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_moving_soldiers);

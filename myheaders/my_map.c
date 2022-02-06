@@ -1,6 +1,7 @@
 #include "my_map.h"
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <stdio.h>
+#include <math.h>
 #include <time.h>
 #include <stdlib.h>
 #include "my_text.h"
@@ -60,6 +61,7 @@ castle* generate_random_map(int number_of_players, int number_of_castles){
         castles[i].center_y = default_y_coordinates[selected_castles_index[i]];
         castles[i].player = -1;
         castles[i].soldiers = START_NUMBER_OF_SOLDIERS;
+        castles[i].soldiers_with_destination = 0;
         castles[i].radius = (rand()%31) + 40;
         castles[i].color = 0x88B9A8B0;
         castles[i].center_color = 0x88B3899B;
@@ -101,13 +103,13 @@ void render_map(castle* castles, int number_of_castles, SDL_Renderer* renderer){
         char number_of_soldiers[4];
         itoa(castles[i].soldiers, number_of_soldiers, 10);
 
-        SDL_Rect* rectangle;
-        rectangle->y = castles[i].center_y - 10;
-        rectangle->h = 20;
-        rectangle->w = 10 * digits_of(castles[i].soldiers);
-        rectangle->x = castles[i].center_x - (rectangle->w / 2);
+        SDL_Rect rectangle;
+        rectangle.y = castles[i].center_y - 10;
+        rectangle.h = 20;
+        rectangle.w = 10 * digits_of(castles[i].soldiers);
+        rectangle.x = castles[i].center_x - (rectangle.w / 2);
 
-        print_text(comic_font, number_of_soldiers, CASTLE_OUTLINE_COLOR, renderer, rectangle);
+        print_text(comic_font, number_of_soldiers, CASTLE_OUTLINE_COLOR, renderer, &rectangle);
     }
 }
 
@@ -315,9 +317,11 @@ castle* random_map_menu(SDL_Renderer* renderer, int* number_of_players, int* num
                 if(click_in_rect(event, player_plus)){
                     if(*number_of_players < 4)
                         (*number_of_players)++;
+                    if(*number_of_castles == *number_of_players)
+                        (*number_of_castles)++;
                 }
                 if(click_in_rect(event, castle_minus)){
-                    if(*number_of_castles > 3)
+                    if(*number_of_castles > (*number_of_players + 1))
                         (*number_of_castles)--;
                 }
                 if(click_in_rect(event, castle_plus)){
@@ -354,7 +358,9 @@ castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int
     SDL_Texture* random_map_background = SDL_CreateTextureFromSurface(renderer, surface1);
     SDL_FreeSurface(surface1); surface1 = NULL;
     SDL_Rect quit_rect = {903, 548, 177, 92};
-    SDL_Rect default_maps_rect = {374, 179, 330, 246};
+    SDL_Rect default_map1_rect = {374, 177, 330, 60};
+    SDL_Rect default_map2_rect = {374, 267, 330, 60};
+    SDL_Rect default_map3_rect = {374, 357, 330, 60};
     SDL_Rect random_map_rect = {352, 460, 374, 58};
     SDL_Event event;
     while(1){
@@ -367,10 +373,26 @@ castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int
                 if(click_in_rect(event, quit_rect)){
                     return NULL;
                 }
-                if(click_in_rect(event, default_maps_rect)){
+                if(click_in_rect(event, default_map1_rect)){
                     *number_of_players = 4;
                     *number_of_castles = 20;
-                    castle* castles =  generate_random_map(4, 20);
+                    castle* castles =  generate_random_map(*number_of_players, *number_of_castles);
+                    if(castles != NULL){
+                        return castles;
+                    }
+                }
+                if(click_in_rect(event, default_map2_rect)){
+                    *number_of_players = 3;
+                    *number_of_castles = 15;
+                    castle* castles = generate_random_map(*number_of_players, *number_of_castles);
+                    if(castles != NULL){
+                        return castles;
+                    }
+                }
+                if(click_in_rect(event, default_map3_rect)){
+                    *number_of_players = 2;
+                    *number_of_castles = 10;
+                    castle* castles =  generate_random_map(*number_of_players, *number_of_castles);
                     if(castles != NULL){
                         return castles;
                     }
@@ -435,4 +457,65 @@ void evaluate_menu_rects(SDL_Rect* quick_game_rect, SDL_Rect* scoreboard_rect, S
     quit_rect->h = 82;
     quit_rect->x = 477;
     quit_rect->w = 157;
+}
+
+castle* click_on_castle(SDL_Event event, castle* castles, int number_of_castles){
+    for(int i=0; i<number_of_castles; i++){
+        if(event.button.x < castles[i].center_x + CENTER_RADIUS && event.button.x > castles[i].center_x - CENTER_RADIUS
+        && event.button.y < castles[i].center_y + CENTER_RADIUS && event.button.y > castles[i].center_y - CENTER_RADIUS){
+            return &castles[i];
+        }
+    }
+    return NULL;
+}
+
+void create_new_soldier(castle* source, castle* destination, soldier** soldiers, int number_of_moving_soldiers, int speed){
+    *soldiers = realloc(*soldiers, (number_of_moving_soldiers+1) * sizeof(soldier));
+    (*soldiers)[number_of_moving_soldiers].destination = destination;
+    (*soldiers)[number_of_moving_soldiers].source = source;
+    (*soldiers)[number_of_moving_soldiers].radius = SOLDIER_RADIUS;
+    (*soldiers)[number_of_moving_soldiers].x = source->center_x;
+    (*soldiers)[number_of_moving_soldiers].y = source->center_y;
+    (*soldiers)[number_of_moving_soldiers].speed = speed;
+    (*soldiers)[number_of_moving_soldiers].player = source->player;
+    source->soldiers_with_destination--;
+    source->soldiers--;
+}
+
+void send_one_soldier(soldier* the_soldier){
+    if(the_soldier->radius != 0) {
+        int x_distance = (the_soldier->destination->center_x - the_soldier->x);
+        int y_distance = (the_soldier->destination->center_y - the_soldier->y);
+        double length = sqrt((the_soldier->destination->center_y - the_soldier->y)*(the_soldier->destination->center_y - the_soldier->y)
+                              + (the_soldier->destination->center_x - the_soldier->x)*(the_soldier->destination->center_x - the_soldier->x));
+        the_soldier->x += (x_distance / (double)length) * the_soldier->speed;
+        the_soldier->y += (y_distance / (double)length) * the_soldier->speed;
+
+        // if it arrives
+        if (the_soldier->x < the_soldier->destination->center_x + CENTER_RADIUS && the_soldier->x > the_soldier->destination->center_x - CENTER_RADIUS
+        && the_soldier->y < the_soldier->destination->center_y + CENTER_RADIUS && the_soldier->y > the_soldier->destination->center_y - CENTER_RADIUS) {
+            if (the_soldier->player == the_soldier->destination->player) {
+                the_soldier->destination->soldiers++;
+            } else {
+                if (the_soldier->destination->soldiers != 0) {
+                    if(the_soldier->destination->soldiers == the_soldier->destination->soldiers_with_destination){
+                        the_soldier->destination->soldiers_with_destination--;
+                    }
+                    the_soldier->destination->soldiers--;
+                }else{
+                    the_soldier->destination->player = the_soldier->player;
+                    the_soldier->destination->color = the_soldier->source->color;
+                    the_soldier->destination->center_color = the_soldier->source->center_color;
+                    the_soldier->destination->soldiers = 1;
+                }
+            }
+            the_soldier->radius = 0;
+        }
+    }
+}
+
+void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_moving_soldiers){
+    for(int i=0; i<number_of_moving_soldiers; i++){
+        filledCircleColor(renderer, soldiers[i].x, soldiers[i].y, soldiers[i].radius, soldiers[i].source->center_color);
+    }
 }

@@ -15,13 +15,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="Main Menu, Scoreboard, and Random Map Generation Menu done">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2022-02-04T08-21-08-0044.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/myheaders/my_map.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/myheaders/my_map.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myheaders/my_map.c" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_map.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myheaders/my_map.h" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_map.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myheaders/my_text.h" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_text.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +36,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -60,7 +66,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="cmake.loaded.for.project" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/images" />
-    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
+    <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
     <property name="structure.view.defaults.are.configured" value="true" />
   </component>
   <component name="RecentsManager">
@@ -75,11 +81,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="project_parsabsh" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="project_parsabsh" TARGET_NAME="project_parsabsh" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="project_parsabsh" RUN_TARGET_NAME="project_parsabsh">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -122,6 +123,9 @@
       <workItem from="1643867805348" duration="17671000" />
       <workItem from="1643903969108" duration="9027000" />
       <workItem from="1643954213275" duration="4508000" />
+      <workItem from="1644037963971" duration="24289000" />
+      <workItem from="1644126628001" duration="5247000" />
+      <workItem from="1644132764886" duration="4307000" />
     </task>
     <task id="LOCAL-00001" summary="Background music added">
       <created>1643059043065</created>
@@ -165,7 +169,21 @@
       <option name="project" value="LOCAL" />
       <updated>1643730557004</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Main Menu, Scoreboard, and Random Map Generation Menu done">
+      <created>1643962881359</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1643962881359</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Main Menu, Scoreboard, and Random Map Generation Menu done">
+      <created>1643963047254</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1643963047254</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,7 +208,8 @@
     <MESSAGE value="login page done" />
     <MESSAGE value="random map generation done" />
     <MESSAGE value="increment of soldiers done" />
-    <option name="LAST_COMMIT_MESSAGE" value="increment of soldiers done" />
+    <MESSAGE value="Main Menu, Scoreboard, and Random Map Generation Menu done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Main Menu, Scoreboard, and Random Map Generation Menu done" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

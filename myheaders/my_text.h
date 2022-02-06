@@ -3,8 +3,6 @@
 
 extern TTF_Font* comic_font;
 extern TTF_Font* consola_font;
-extern TTF_Font* gill_sans_condensed_font;
-extern TTF_Font* gill_sans_ultra_bold_font;
 
 void load_fonts();
 

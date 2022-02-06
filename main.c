@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include "myheaders/my_audio.h"
 #include "myheaders/my_text.h"
 #include "myheaders/my_colors.h"
@@ -15,7 +16,9 @@
 #define FPS 20
 
 // Unit : soldiers per second
-#define RATE_OF_SOLDIERS_INCREMENT 3
+#define RATE_OF_SOLDIERS_INCREMENT 1
+// Unit : pixels per second
+#define DEFAULT_SPEED_OF_SOLDIERS 5
 
 int main(){
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0){
@@ -131,21 +134,63 @@ int main(){
             break;
         }
         int time = 0; // a variable that shows the time (value = FPS * seconds)
+        SDL_bool is_source_selected = SDL_FALSE;
+        SDL_bool is_destination_selected = SDL_FALSE;
+        castle* source_castle[26] = {NULL};
+        int number_of_sources = 0;
+        castle* destination_castle[26] = {NULL};
+        int number_of_destinations = 0;
+        int number_of_moving_soldiers = 0;
+        int number_of_done_motions = 0;
+        soldier* soldiers = malloc(sizeof(soldier));
         is_open = SDL_TRUE;
         while(is_open){
             SDL_RenderClear(mainRenderer);
-            while(SDL_PollEvent(&event)) {
-                // close the window
-                if (event.type == SDL_QUIT) {
+            while(SDL_PollEvent(&event)){
+                if(event.type == SDL_QUIT) {
                     is_open = SDL_FALSE;
                     break;
+                }
+                if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                    if(!is_source_selected){
+                        source_castle[number_of_sources] = click_on_castle(event, castles, number_of_castles);
+                        if(source_castle[number_of_sources] != NULL && source_castle[number_of_sources]->player == 0){
+                            is_source_selected = SDL_TRUE;
+                            number_of_sources++;
+                        }
+                    }else{
+                        destination_castle[number_of_destinations] = click_on_castle(event, castles, number_of_castles);
+                        if(destination_castle[number_of_destinations] != NULL && destination_castle[number_of_destinations]->center_x != source_castle[number_of_sources-1]->center_x){
+                            is_source_selected = SDL_FALSE;
+                            is_destination_selected = SDL_TRUE;
+                            source_castle[number_of_sources-1]->soldiers_with_destination = source_castle[number_of_sources-1]->soldiers - source_castle[number_of_sources-1]->soldiers_with_destination;
+                            number_of_destinations++;
+                        }
+                    }
                 }
             }
             time++;
             check_music_finished();
             increment_soldiers(time, castles, FPS, RATE_OF_SOLDIERS_INCREMENT, number_of_castles);
             SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
+            if(is_source_selected){
+                circleColor(mainRenderer, source_castle[number_of_sources-1]->center_x, source_castle[number_of_sources-1]->center_y, source_castle[number_of_sources-1]->radius + 2, 0xFF0089E5);
+            }
+            if(is_destination_selected && time % 5 == 0){
+                for(int i=number_of_done_motions; i<number_of_sources; i++){
+                    if(source_castle[i]->soldiers_with_destination > 0){
+                        create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
+                        if(source_castle[i]->soldiers_with_destination == 0){
+                            number_of_done_motions = i+1;
+                        }
+                    }
+                }
+            }
+            for(int i=0; i<number_of_moving_soldiers; i++){
+                send_one_soldier(soldiers+i);
+            }
             render_map(castles, number_of_castles, mainRenderer);
+            render_soldiers(mainRenderer, soldiers, number_of_moving_soldiers);
             SDL_RenderPresent(mainRenderer);
             SDL_Delay(1000/FPS);
         }
