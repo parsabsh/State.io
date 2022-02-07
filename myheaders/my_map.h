@@ -66,7 +66,7 @@ typedef struct soldier{
      3 : player 3 (pink)
     */
     int player;
-
+    Uint32 color;
     castle* source;
     castle* destination;
     int speed;
@@ -77,6 +77,9 @@ castle* click_on_castle(SDL_Event event, castle* castles, int number_of_castles)
 
 void create_new_soldier(castle* source, castle* destination, soldier** soldiers, int number_of_moving_soldiers, int speed);
 
-void send_one_soldier(soldier* the_soldier);
+// move soldiers and check for collisions
+void send_one_soldier(soldier* the_soldier, soldier* soldiers);
 
 void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_moving_soldiers);
+
+void AI_moves(castle* castles, int number_of_castles, castle*** source_castles, int* number_of_sources, castle*** destination_castles, int* number_of_destinations, int number_of_done_motions);

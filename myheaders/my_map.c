@@ -477,6 +477,7 @@ void create_new_soldier(castle* source, castle* destination, soldier** soldiers,
     (*soldiers)[number_of_moving_soldiers].destination = destination;
     (*soldiers)[number_of_moving_soldiers].source = source;
     (*soldiers)[number_of_moving_soldiers].radius = SOLDIER_RADIUS;
+    (*soldiers)[number_of_moving_soldiers].color = source->center_color;
     (*soldiers)[number_of_moving_soldiers].x = source->center_x;
     (*soldiers)[number_of_moving_soldiers].y = source->center_y;
     (*soldiers)[number_of_moving_soldiers].speed = speed;
@@ -491,8 +492,8 @@ void create_new_soldier(castle* source, castle* destination, soldier** soldiers,
     source->soldiers--;
 }
 
-void send_one_soldier(soldier* the_soldier){
-    if(the_soldier->radius != 0) {
+void send_one_soldier(soldier* the_soldier, soldier* soldiers){
+    if(the_soldier->radius != 0){
         int x_distance = (the_soldier->destination->center_x - the_soldier->x);
         int y_distance = (the_soldier->destination->center_y - the_soldier->y);
         double length = sqrt((the_soldier->destination->center_y - the_soldier->y)*(the_soldier->destination->center_y - the_soldier->y)
@@ -525,13 +526,55 @@ void send_one_soldier(soldier* the_soldier){
             }
             the_soldier->radius = 0;
         }
+
+        // check for collisions
+        for(soldier* i=soldiers; i<the_soldier; i++){
+            if(i->player != the_soldier->player && i != the_soldier){
+                int xDistance = i->x - the_soldier->x;
+                int yDistance = i->y - the_soldier->y;
+                if(xDistance < 2*i->radius && xDistance > -2*i->radius
+                && yDistance < 2*i->radius && yDistance > -2*i->radius){
+                    i->radius = 0;
+                    the_soldier->radius = 0;
+                }
+            }
+        }
     }
 }
 
 void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_moving_soldiers){
     for(int i=0; i<number_of_moving_soldiers; i++){
         if(soldiers[i].radius != 0){
-            filledCircleColor(renderer, soldiers[i].x, soldiers[i].y, soldiers[i].radius, soldiers[i].source->center_color);
+            filledCircleColor(renderer, soldiers[i].x, soldiers[i].y, soldiers[i].radius, soldiers[i].color);
+        }
+    }
+}
+
+void AI_moves(castle* castles, int number_of_castles, castle*** source_castles, int* number_of_sources, castle*** destination_castles, int* number_of_destinations, int number_of_done_motions){
+    for(int i=0; i<number_of_castles; i++){
+        if(castles[i].player > 0 && castles[i].soldiers_with_destination==0 && castles[i].soldiers > 20){
+            for(int j=0; j<number_of_castles; j++){
+                if(castles[i].soldiers - castles[j].soldiers > 10 && castles[j].player != castles[i].player){
+                    (*source_castles)[*number_of_sources] = castles+i;
+                    (*number_of_sources)++;
+                    *source_castles = realloc(*source_castles, (*number_of_sources+1) * sizeof(castle*));
+                    (*destination_castles)[*number_of_destinations] = castles+j;
+                    (*number_of_destinations)++;
+                    *destination_castles = realloc(*destination_castles, (*number_of_destinations+1) * sizeof(castle *));
+                    castles[i].soldiers_with_destination = castles[i].soldiers;
+                    return;
+                }
+                else if(castles[i].soldiers > castles[j].soldiers && castles[j].player == -1){
+                    (*source_castles)[*number_of_sources] = castles+i;
+                    (*number_of_sources)++;
+                    *source_castles = realloc(*source_castles, (*number_of_sources+1) * sizeof(castle*));
+                    (*destination_castles)[*number_of_destinations] = castles+j;
+                    (*number_of_destinations)++;
+                    *destination_castles = realloc(*destination_castles, (*number_of_destinations+1) * sizeof(castle *));
+                    castles[i].soldiers_with_destination = castles[i].soldiers;
+                    return;
+                }
+            }
         }
     }
 }

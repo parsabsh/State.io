@@ -71,7 +71,6 @@ int main(){
     while(is_open){
         SDL_RenderClear(getUserNameRenderer);
         while(SDL_PollEvent(&event)){
-            // close the window
             if(event.type == SDL_QUIT){
                 is_open = SDL_FALSE;
                 break;
@@ -136,13 +135,13 @@ int main(){
         int time = 0; // a variable that shows the time (value = FPS * seconds)
         SDL_bool is_source_selected = SDL_FALSE;
         SDL_bool is_destination_selected = SDL_FALSE;
-        castle** source_castle = malloc(sizeof(castle*));
+        castle** source_castle = malloc(sizeof(castle*)); // an array of pointers to our castles
         int number_of_sources = 0;
-        castle** destination_castle = malloc(sizeof(castle*));
+        castle** destination_castle = malloc(sizeof(castle*)); // an array of pointers to our castles
         int number_of_destinations = 0;
         int number_of_moving_soldiers = 0;
         int number_of_done_motions = 0;
-        soldier* soldiers = malloc(sizeof(soldier));
+        soldier* soldiers = malloc(sizeof(soldier)); // an array of soldiers
         is_open = SDL_TRUE;
         while(is_open){
             SDL_RenderClear(mainRenderer);
@@ -181,6 +180,9 @@ int main(){
             check_music_finished();
             increment_soldiers(time, castles, FPS, RATE_OF_SOLDIERS_INCREMENT, number_of_castles);
             SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
+            if(is_destination_selected && !is_source_selected){
+                AI_moves(castles, number_of_castles, &source_castle, &number_of_sources, &destination_castle, &number_of_destinations, number_of_done_motions);
+            }
             if(is_source_selected){
                 circleColor(mainRenderer, source_castle[number_of_sources-1]->center_x, source_castle[number_of_sources-1]->center_y, source_castle[number_of_sources-1]->radius + 2, 0xFF0089E5);
             }
@@ -207,7 +209,7 @@ int main(){
                 }
             }
             for(int i=0; i<number_of_moving_soldiers; i++){
-                send_one_soldier(&soldiers[i]);
+                send_one_soldier(&soldiers[i], soldiers);
             }
             render_map(castles, number_of_castles, mainRenderer);
             render_soldiers(mainRenderer, soldiers, number_of_moving_soldiers);
