@@ -522,6 +522,9 @@ void send_one_soldier(soldier* the_soldier, soldier* soldiers){
                     the_soldier->destination->color = the_soldier->source->color;
                     the_soldier->destination->center_color = the_soldier->source->center_color;
                     the_soldier->destination->soldiers = 1;
+                    the_soldier->destination->soldiers_with_destination = 0;
+                    the_soldier->destination->soldiers_with_destination_2 = 0;
+                    the_soldier->destination->soldiers_with_destination_3 = 0;
                 }
             }
             the_soldier->radius = 0;
@@ -577,4 +580,86 @@ void AI_moves(castle* castles, int number_of_castles, castle*** source_castles, 
             }
         }
     }
+}
+
+int check_for_winner(int points_of_players[4][2], castle* castles, int number_of_players, int number_of_castles, int is_lost[4], SDL_Renderer* renderer){
+    int is_lost_copy[4] = {1, 1, 1, 1};
+
+    for(int i=0; i<number_of_castles; i++){
+        if(castles[i].player >= 0){
+            is_lost_copy[castles[i].player] = 0;
+        }
+    }
+    int is_all_lost = 1;
+
+    // if an enemy loses
+    for(int i=1; i<number_of_players; i++){
+        if(is_lost_copy[i]){
+            if(!is_lost[i])
+                points_of_players[i][1] -= 5;
+        }else{
+            is_all_lost = 0;
+        }
+    }
+    for(int i=0; i<4; i++){
+        is_lost[i] = is_lost_copy[i];
+    }
+    // if the user loses
+    if(is_lost[0]){
+        points_of_players[0][1] -= 5;
+        for(int i=1; i<number_of_players; i++){
+            if(!is_lost[i])
+                points_of_players[i][1] += 5;
+        }
+        SDL_Surface* surface = SDL_LoadBMP("images/you_lost.bmp");
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_FreeSurface(surface); // free the surface because we don't need it anymore
+        SDL_Rect quit_rect = {825, 550, 255, 90};
+        SDL_Event event;
+        while(1){
+            SDL_RenderClear(renderer);
+            while(SDL_PollEvent(&event)){
+                if(event.type == SDL_QUIT){
+                    return 1;
+                }
+                if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+                    if (click_in_rect(event, quit_rect)) {
+                        return 1;
+                    }
+                }
+            }
+            check_music_finished();
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(1000/20);
+        }
+    }
+
+    // if the user wins
+    if((!is_lost[0]) && is_all_lost){
+        points_of_players[0][1] += 5;
+        SDL_Surface* surface = SDL_LoadBMP("images/you_won.bmp");
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_FreeSurface(surface); // free the surface because we don't need it anymore
+        SDL_Rect quit_rect = {825, 550, 255, 90};
+        SDL_Event event;
+        while(1){
+            SDL_RenderClear(renderer);
+            while(SDL_PollEvent(&event)){
+                if(event.type == SDL_QUIT){
+                    return 1;
+                }
+                if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+                    if (click_in_rect(event, quit_rect)) {
+                        return 1;
+                    }
+                }
+            }
+            check_music_finished();
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(1000/20);
+        }
+    }
+    return 0;
 }

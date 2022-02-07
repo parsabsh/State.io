@@ -14,7 +14,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="Movement of soldiers done (bugs fixed)">
+    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="soldiers collisions done / enemies' AI done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
@@ -22,6 +22,7 @@
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/myheaders/my_map.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/myheaders/my_map.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/login_background.bmp" beforeDir="false" afterPath="$PROJECT_DIR$/images/login_background.bmp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myheaders/my_map.c" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_map.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/myheaders/my_map.h" beforeDir="false" afterPath="$PROJECT_DIR$/myheaders/my_map.h" afterDir="false" />
@@ -125,7 +126,8 @@
       <workItem from="1644126628001" duration="5247000" />
       <workItem from="1644132764886" duration="11543000" />
       <workItem from="1644163636667" duration="13623000" />
-      <workItem from="1644214877728" duration="10529000" />
+      <workItem from="1644214877728" duration="11031000" />
+      <workItem from="1644231419330" duration="14230000" />
     </task>
     <task id="LOCAL-00001" summary="Background music added">
       <created>1643059043065</created>
@@ -197,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644184037206</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="soldiers collisions done / enemies' AI done">
+      <created>1644227421062</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1644227421062</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,7 +234,8 @@
     <MESSAGE value="Main Menu, Scoreboard, and Random Map Generation Menu done" />
     <MESSAGE value="Movement of soldiers done with some bugs" />
     <MESSAGE value="Movement of soldiers done (bugs fixed)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Movement of soldiers done (bugs fixed)" />
+    <MESSAGE value="soldiers collisions done / enemies' AI done" />
+    <option name="LAST_COMMIT_MESSAGE" value="soldiers collisions done / enemies' AI done" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #define CENTER_RADIUS 18
 #define START_NUMBER_OF_SOLDIERS 20
-#define MAXIMUM_NUMBER_OF_SOLDIERS 120
+#define MAXIMUM_NUMBER_OF_SOLDIERS 100
 #define SOLDIER_RADIUS 5
 
 typedef struct castle{
@@ -83,3 +83,6 @@ void send_one_soldier(soldier* the_soldier, soldier* soldiers);
 void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_moving_soldiers);
 
 void AI_moves(castle* castles, int number_of_castles, castle*** source_castles, int* number_of_sources, castle*** destination_castles, int* number_of_destinations, int number_of_done_motions);
+
+// returns 1 if the game is over and else returns 0
+int check_for_winner(int points_of_players[4][2], castle* castles, int number_of_players, int number_of_castles, int is_lost[4], SDL_Renderer* renderer);

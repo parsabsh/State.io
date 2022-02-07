@@ -50,14 +50,12 @@ int main(){
     SDL_Surface* surface1 = SDL_LoadBMP("images/login_background.bmp");
     SDL_Texture* menu_login_texture = SDL_CreateTextureFromSurface(getUserNameRenderer, surface1);
     SDL_FreeSurface(surface1); // free the surface because we don't need it anymore
-    surface1 = NULL;
 
     // load text box for input username
     SDL_Surface* surface2 = SDL_LoadBMP("images/text_box_simple.bmp");
     SDL_Texture* text_box_texture = SDL_CreateTextureFromSurface(getUserNameRenderer, surface2);
     SDL_FreeSurface(surface2); // free the surface because we don't need it anymore
     SDL_Rect text_box_rect = {390, 280, 300, 80};
-    surface2 = NULL;
 
     // username input variables
     SDL_Rect userNameInput_rect = {530, 300, 20, 40};
@@ -122,16 +120,17 @@ int main(){
     SDL_Rect scoreboard_rect;
     SDL_Rect quit_rect;
     evaluate_menu_rects(&quick_rect, &scoreboard_rect, &quit_rect);
+    int points_of_players[4][2] = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
 
     while(1){
         // variables
         int number_of_players;
         int number_of_castles;
-        int points_of_players[4][2] = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
         castle* castles = show_menu(mainRenderer, &quick_rect, &scoreboard_rect, &quit_rect, menu_texture, &number_of_players, &number_of_castles, points_of_players, user_name);
         if(castles == NULL){
             break;
         }
+        int is_lost[4] = {1, 1, 1, 1}; // 0 for not lost and 1 for lost
         int time = 0; // a variable that shows the time (value = FPS * seconds)
         SDL_bool is_source_selected = SDL_FALSE;
         SDL_bool is_destination_selected = SDL_FALSE;
@@ -180,9 +179,9 @@ int main(){
             check_music_finished();
             increment_soldiers(time, castles, FPS, RATE_OF_SOLDIERS_INCREMENT, number_of_castles);
             SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
-            if(is_destination_selected && !is_source_selected){
-                AI_moves(castles, number_of_castles, &source_castle, &number_of_sources, &destination_castle, &number_of_destinations, number_of_done_motions);
-            }
+//            if(is_destination_selected && !is_source_selected){
+//                AI_moves(castles, number_of_castles, &source_castle, &number_of_sources, &destination_castle, &number_of_destinations, number_of_done_motions);
+//            }
             if(is_source_selected){
                 circleColor(mainRenderer, source_castle[number_of_sources-1]->center_x, source_castle[number_of_sources-1]->center_y, source_castle[number_of_sources-1]->radius + 2, 0xFF0089E5);
             }
@@ -193,14 +192,12 @@ int main(){
                         if(source_castle[i]->soldiers_with_destination == 0){
                             number_of_done_motions++;
                         }
-                    }
-                    else if(source_castle[i]->soldiers_with_destination_2 > 0){
+                    }else if(source_castle[i]->soldiers_with_destination_2 > 0){
                         create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
                         if(source_castle[i]->soldiers_with_destination_2 == 0){
                             number_of_done_motions++;
                         }
-                    }
-                    else if(source_castle[i]->soldiers_with_destination_3 > 0){
+                    }else if(source_castle[i]->soldiers_with_destination_3 > 0){
                         create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
                         if(source_castle[i]->soldiers_with_destination_3 == 0){
                             number_of_done_motions++;
@@ -211,13 +208,18 @@ int main(){
             for(int i=0; i<number_of_moving_soldiers; i++){
                 send_one_soldier(&soldiers[i], soldiers);
             }
+            if(is_destination_selected && !is_source_selected){
+                AI_moves(castles, number_of_castles, &source_castle, &number_of_sources, &destination_castle, &number_of_destinations, number_of_done_motions);
+            }
+            if(check_for_winner(points_of_players, castles, number_of_players, number_of_castles, is_lost, mainRenderer)){
+                break;
+            }
             render_map(castles, number_of_castles, mainRenderer);
             render_soldiers(mainRenderer, soldiers, number_of_moving_soldiers);
             SDL_RenderPresent(mainRenderer);
             SDL_Delay(1000/FPS);
         }
     }
-
     SDL_DestroyTexture(main_background_texture);
     SDL_DestroyTexture(menu_texture);
     SDL_DestroyWindow(mainWindow);
