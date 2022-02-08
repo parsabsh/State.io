@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include <stdio.h>
 #include "myheaders/my_audio.h"
 #include "myheaders/my_text.h"
 #include "myheaders/my_colors.h"
@@ -95,7 +96,18 @@ int main(){
     // ----------------------------------------------------------------------------------------------------------
     // ---------------------------------------THE END OF LOGIN PAGE----------------------------------------------
     // ----------------------------------------------------------------------------------------------------------
-
+    int points_of_players[4][2] = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
+    char file_name[30] = "";
+    sprintf(file_name, "users/%s.txt", user_name);
+    FILE* user_file = fopen(file_name, "r+");
+    if(user_file != NULL){
+        fscanf(user_file, "%d %d %d %d", &points_of_players[0][1], &points_of_players[1][1], &points_of_players[2][1], &points_of_players[3][1]);
+        fclose(user_file);
+        user_file = fopen(file_name, "w+");
+    }else{
+        user_file = fopen(file_name, "w+");
+        fprintf(user_file, "%d %d %d %d", points_of_players[0][1], points_of_players[1][1], points_of_players[2][1], points_of_players[3][1]);
+    }
     // ----------------------------------------------------------------------------------------------------------
     // ---------------------------------START OF THE MAIN MENU + MAIN GAME---------------------------------------
     // ----------------------------------------------------------------------------------------------------------
@@ -120,7 +132,6 @@ int main(){
     SDL_Rect scoreboard_rect;
     SDL_Rect quit_rect;
     evaluate_menu_rects(&quick_rect, &scoreboard_rect, &quit_rect);
-    int points_of_players[4][2] = {{0, 0}, {1, 0}, {2, 0}, {3, 0}};
 
     while(1){
         // variables
@@ -130,7 +141,10 @@ int main(){
         if(castles == NULL){
             break;
         }
-        int is_lost[4] = {1, 1, 1, 1}; // 0 for not lost and 1 for lost
+        int is_lost[number_of_players]; // 0 for not lost and 1 for lost
+        for(int i=0; i<number_of_players; i++){
+            is_lost[i] = 1;
+        }
         int time = 0; // a variable that shows the time (value = FPS * seconds)
         SDL_bool is_source_selected = SDL_FALSE;
         SDL_bool is_destination_selected = SDL_FALSE;
@@ -166,8 +180,6 @@ int main(){
                                 source_castle[number_of_sources-1]->soldiers_with_destination = source_castle[number_of_sources-1]->soldiers;
                             }else if(source_castle[number_of_sources-1]->soldiers_with_destination_2 == 0){
                                 source_castle[number_of_sources-1]->soldiers_with_destination_2 = source_castle[number_of_sources-1]->soldiers - source_castle[number_of_sources-1]->soldiers_with_destination;
-                            }else if(source_castle[number_of_sources-1]->soldiers_with_destination_3 == 0){
-                                source_castle[number_of_sources-1]->soldiers_with_destination_3 = source_castle[number_of_sources-1]->soldiers - source_castle[number_of_sources-1]->soldiers_with_destination - source_castle[number_of_sources-1]->soldiers_with_destination_2;
                             }
                             number_of_destinations++;
                             destination_castle = realloc(destination_castle, (number_of_destinations+1) * sizeof(castle *));
@@ -179,37 +191,30 @@ int main(){
             check_music_finished();
             increment_soldiers(time, castles, FPS, RATE_OF_SOLDIERS_INCREMENT, number_of_castles);
             SDL_RenderCopy(mainRenderer, main_background_texture, NULL, NULL);
-//            if(is_destination_selected && !is_source_selected){
-//                AI_moves(castles, number_of_castles, &source_castle, &number_of_sources, &destination_castle, &number_of_destinations, number_of_done_motions);
-//            }
             if(is_source_selected){
                 circleColor(mainRenderer, source_castle[number_of_sources-1]->center_x, source_castle[number_of_sources-1]->center_y, source_castle[number_of_sources-1]->radius + 2, 0xFF0089E5);
             }
+            if(is_destination_selected && !is_source_selected && time % FPS == 0){
+                AI_moves(castles, number_of_castles, &source_castle, &number_of_sources, &destination_castle, &number_of_destinations, number_of_done_motions);
+            }
             if(is_destination_selected && time % 3 == 0){
                 for(int i=number_of_done_motions; i<number_of_destinations; i++){
-                    if(source_castle[i]->soldiers_with_destination > 0){
-                        create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
-                        if(source_castle[i]->soldiers_with_destination == 0){
-                            number_of_done_motions++;
-                        }
-                    }else if(source_castle[i]->soldiers_with_destination_2 > 0){
+                    if(source_castle[i] != NULL && source_castle[i]->soldiers_with_destination_2 > 0){
                         create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
                         if(source_castle[i]->soldiers_with_destination_2 == 0){
                             number_of_done_motions++;
                         }
-                    }else if(source_castle[i]->soldiers_with_destination_3 > 0){
+                    }
+                    if(source_castle[i] != NULL && source_castle[i]->soldiers_with_destination > 0){
                         create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
-                        if(source_castle[i]->soldiers_with_destination_3 == 0){
+                        if(source_castle[i]->soldiers_with_destination == 0){
                             number_of_done_motions++;
                         }
                     }
                 }
             }
             for(int i=0; i<number_of_moving_soldiers; i++){
-                send_one_soldier(&soldiers[i], soldiers);
-            }
-            if(is_destination_selected && !is_source_selected){
-                AI_moves(castles, number_of_castles, &source_castle, &number_of_sources, &destination_castle, &number_of_destinations, number_of_done_motions);
+                send_one_soldier(&soldiers[i], soldiers, source_castle, destination_castle, number_of_destinations);
             }
             if(check_for_winner(points_of_players, castles, number_of_players, number_of_castles, is_lost, mainRenderer)){
                 break;
@@ -219,6 +224,8 @@ int main(){
             SDL_RenderPresent(mainRenderer);
             SDL_Delay(1000/FPS);
         }
+        fseek (user_file, 0, SEEK_SET);
+        fprintf(user_file, "%d %d %d %d", points_of_players[0][1], points_of_players[1][1], points_of_players[2][1], points_of_players[3][1]);
     }
     SDL_DestroyTexture(main_background_texture);
     SDL_DestroyTexture(menu_texture);
@@ -226,6 +233,7 @@ int main(){
     SDL_DestroyRenderer(mainRenderer);
 
     // shut everything down
+    fclose(user_file);
     SDL_CloseAudio(); // stop plating the background music
     SDL_FreeWAV(wav_buffer);
     SDL_Quit();

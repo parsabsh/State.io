@@ -64,7 +64,6 @@ castle* generate_random_map(int number_of_players, int number_of_castles){
         castles[i].soldiers = START_NUMBER_OF_SOLDIERS;
         castles[i].soldiers_with_destination = 0;
         castles[i].soldiers_with_destination_2 = 0;
-        castles[i].soldiers_with_destination_3 = 0;
         castles[i].radius = (rand()%31) + 40;
         castles[i].color = 0x88B9A8B0;
         castles[i].center_color = 0x88B3899B;
@@ -152,9 +151,9 @@ void sort(int points_of_players[4][2]){
 }
 
 void unsort(int points_of_players[4][2]){
-    for (int pass = 1; pass < 4; pass++) {
+    for (int pass = 0; pass < 3; pass++){
         for (int i = 0; i < 3; i++){
-            if (points_of_players[i][0] < points_of_players[i + 1][0]) {
+            if (points_of_players[i][0] > points_of_players[i + 1][0]) {
                 int hold[2];
                 hold[0] = points_of_players[i][0];
                 hold[1] = points_of_players[i][1];
@@ -377,12 +376,30 @@ castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int
                     return NULL;
                 }
                 if(click_in_rect(event, default_map1_rect)){
-                    *number_of_players = 4;
-                    *number_of_castles = 20;
-                    castle* castles =  generate_random_map(*number_of_players, *number_of_castles);
-                    if(castles != NULL){
-                        return castles;
+                    *number_of_players = 2;
+                    *number_of_castles = 12;
+                    castle* castles = malloc(sizeof(castle) * (*number_of_castles));
+                    for(int i=0; i<11; i++){
+                        castles[i].player = 0;
+                        castles[i].soldiers = START_NUMBER_OF_SOLDIERS;
+                        castles[i].soldiers_with_destination = 0;
+                        castles[i].soldiers_with_destination_2 = 0;
+                        castles[i].radius = (5*i)%31 + 40;
+                        castles[i].center_x = default_x_coordinates[2*i];
+                        castles[i].center_y = default_y_coordinates[2*i];
+                        castles[i].color = 0xFFEABA8A;
+                        castles[i].center_color = 0xFF4B2600;
                     }
+                    castles[11].player = 1;
+                    castles[11].soldiers = START_NUMBER_OF_SOLDIERS;
+                    castles[11].soldiers_with_destination = 0;
+                    castles[11].soldiers_with_destination_2 = 0;
+                    castles[11].radius = 65;
+                    castles[11].center_x = default_x_coordinates[7];
+                    castles[11].center_y = default_y_coordinates[7];
+                    castles[11].color = 0xFFB7C900;
+                    castles[11].center_color = 0xFF485400;
+                    return castles;
                 }
                 if(click_in_rect(event, default_map2_rect)){
                     *number_of_players = 3;
@@ -473,26 +490,24 @@ castle* click_on_castle(SDL_Event event, castle* castles, int number_of_castles)
 }
 
 void create_new_soldier(castle* source, castle* destination, soldier** soldiers, int number_of_moving_soldiers, int speed){
-    *soldiers = realloc(*soldiers, (number_of_moving_soldiers+1) * sizeof(soldier));
+    *soldiers = realloc(*soldiers, (number_of_moving_soldiers + 1) * sizeof(soldier));
     (*soldiers)[number_of_moving_soldiers].destination = destination;
-    (*soldiers)[number_of_moving_soldiers].source = source;
     (*soldiers)[number_of_moving_soldiers].radius = SOLDIER_RADIUS;
     (*soldiers)[number_of_moving_soldiers].color = source->center_color;
+    (*soldiers)[number_of_moving_soldiers].source_color = source->color;
     (*soldiers)[number_of_moving_soldiers].x = source->center_x;
     (*soldiers)[number_of_moving_soldiers].y = source->center_y;
     (*soldiers)[number_of_moving_soldiers].speed = speed;
     (*soldiers)[number_of_moving_soldiers].player = source->player;
-    if(source->soldiers_with_destination != 0){
-        source->soldiers_with_destination--;
-    }else if(source->soldiers_with_destination_2 != 0){
+    if (source->soldiers_with_destination_2 != 0) {
         source->soldiers_with_destination_2--;
-    }else if(source->soldiers_with_destination_3 != 0){
-        source->soldiers_with_destination_3--;
+    } else if (source->soldiers_with_destination != 0) {
+        source->soldiers_with_destination--;
     }
     source->soldiers--;
 }
 
-void send_one_soldier(soldier* the_soldier, soldier* soldiers){
+void send_one_soldier(soldier* the_soldier, soldier* soldiers, castle** source_castles, castle** destination_castles, int number_pf_destinations){
     if(the_soldier->radius != 0){
         int x_distance = (the_soldier->destination->center_x - the_soldier->x);
         int y_distance = (the_soldier->destination->center_y - the_soldier->y);
@@ -508,23 +523,26 @@ void send_one_soldier(soldier* the_soldier, soldier* soldiers){
                 the_soldier->destination->soldiers++;
             } else {
                 if (the_soldier->destination->soldiers != 0) {
-                    if(the_soldier->destination->soldiers == the_soldier->destination->soldiers_with_destination + the_soldier->destination->soldiers_with_destination_2 + the_soldier->destination->soldiers_with_destination_3){
+                    if(the_soldier->destination->soldiers == the_soldier->destination->soldiers_with_destination + the_soldier->destination->soldiers_with_destination_2){
                         if(the_soldier->destination->soldiers_with_destination != 0)
                         the_soldier->destination->soldiers_with_destination--;
                         else if(the_soldier->destination->soldiers_with_destination_2 != 0)
                             the_soldier->destination->soldiers_with_destination_2--;
-                        else if(the_soldier->destination->soldiers_with_destination_3 != 0)
-                            the_soldier->destination->soldiers_with_destination_3--;
                     }
                     the_soldier->destination->soldiers--;
                 }else{
                     the_soldier->destination->player = the_soldier->player;
-                    the_soldier->destination->color = the_soldier->source->color;
-                    the_soldier->destination->center_color = the_soldier->source->center_color;
+                    the_soldier->destination->color = the_soldier->source_color;
+                    the_soldier->destination->center_color = the_soldier->color;
                     the_soldier->destination->soldiers = 1;
                     the_soldier->destination->soldiers_with_destination = 0;
                     the_soldier->destination->soldiers_with_destination_2 = 0;
-                    the_soldier->destination->soldiers_with_destination_3 = 0;
+                    for(int i=0; i<number_pf_destinations; i++){
+                        if(the_soldier->destination == source_castles[i]){
+                            source_castles[i] = NULL;
+                            destination_castles[i] = NULL;
+                        }
+                    }
                 }
             }
             the_soldier->radius = 0;
@@ -555,9 +573,10 @@ void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_m
 
 void AI_moves(castle* castles, int number_of_castles, castle*** source_castles, int* number_of_sources, castle*** destination_castles, int* number_of_destinations, int number_of_done_motions){
     for(int i=0; i<number_of_castles; i++){
-        if(castles[i].player > 0 && castles[i].soldiers_with_destination==0 && castles[i].soldiers > 20){
+        if(castles[i].player > 0 && castles[i].soldiers_with_destination == 0 && castles[i].soldiers > 20){
             for(int j=0; j<number_of_castles; j++){
-                if(castles[i].soldiers - castles[j].soldiers > 10 && castles[j].player != castles[i].player){
+                // attack other players
+                if(castles[i].soldiers - castles[j].soldiers > 10 && castles[j].player != castles[i].player && castles[j].player != -1){
                     (*source_castles)[*number_of_sources] = castles+i;
                     (*number_of_sources)++;
                     *source_castles = realloc(*source_castles, (*number_of_sources+1) * sizeof(castle*));
@@ -567,7 +586,19 @@ void AI_moves(castle* castles, int number_of_castles, castle*** source_castles, 
                     castles[i].soldiers_with_destination = castles[i].soldiers;
                     return;
                 }
+                // attack Neutral castles
                 else if(castles[i].soldiers > castles[j].soldiers && castles[j].player == -1){
+                    (*source_castles)[*number_of_sources] = castles+i;
+                    (*number_of_sources)++;
+                    *source_castles = realloc(*source_castles, (*number_of_sources+1) * sizeof(castle*));
+                    (*destination_castles)[*number_of_destinations] = castles+j;
+                    (*number_of_destinations)++;
+                    *destination_castles = realloc(*destination_castles, (*number_of_destinations+1) * sizeof(castle *));
+                    castles[i].soldiers_with_destination = castles[i].soldiers;
+                    return;
+                }
+                // support other castles of its own team (castles with the same player)
+                else if(5 > castles[j].soldiers && castles[j].player == castles[i].player){
                     (*source_castles)[*number_of_sources] = castles+i;
                     (*number_of_sources)++;
                     *source_castles = realloc(*source_castles, (*number_of_sources+1) * sizeof(castle*));
@@ -582,8 +613,11 @@ void AI_moves(castle* castles, int number_of_castles, castle*** source_castles, 
     }
 }
 
-int check_for_winner(int points_of_players[4][2], castle* castles, int number_of_players, int number_of_castles, int is_lost[4], SDL_Renderer* renderer){
-    int is_lost_copy[4] = {1, 1, 1, 1};
+int check_for_winner(int points_of_players[4][2], castle* castles, int number_of_players, int number_of_castles, int is_lost[], SDL_Renderer* renderer){
+    int is_lost_copy[number_of_players];
+    for(int i=0; i<number_of_players; i++){
+        is_lost_copy[i] = 1;
+    }
 
     for(int i=0; i<number_of_castles; i++){
         if(castles[i].player >= 0){
@@ -601,7 +635,7 @@ int check_for_winner(int points_of_players[4][2], castle* castles, int number_of
             is_all_lost = 0;
         }
     }
-    for(int i=0; i<4; i++){
+    for(int i=0; i<number_of_players; i++){
         is_lost[i] = is_lost_copy[i];
     }
     // if the user loses

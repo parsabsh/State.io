@@ -27,7 +27,6 @@ typedef struct castle{
     int soldiers_with_destination;
 
     int soldiers_with_destination_2;
-    int soldiers_with_destination_3;
 } castle;
 
 // default coordinates of castles' center
@@ -47,7 +46,7 @@ int click_in_rect(SDL_Event event, SDL_Rect rect);
 castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int* number_of_castles);
 
 castle* show_menu(SDL_Renderer* renderer,SDL_Rect* quick_game_rect, SDL_Rect* Scoreboard_rect, SDL_Rect* quit_rect,
-              SDL_Texture* background, int* number_of_players, int* number_of_castles, int points_of_players[4][2], char username[]);
+                  SDL_Texture* background, int* number_of_players, int* number_of_castles, int points_of_players[4][2], char username[]);
 
 void evaluate_menu_rects(SDL_Rect* quick_game_rect, SDL_Rect* Scoreboard_rect, SDL_Rect* quit_rect);
 
@@ -66,8 +65,7 @@ typedef struct soldier{
      3 : player 3 (pink)
     */
     int player;
-    Uint32 color;
-    castle* source;
+    Uint32 color, source_color;
     castle* destination;
     int speed;
 }soldier;
@@ -78,7 +76,7 @@ castle* click_on_castle(SDL_Event event, castle* castles, int number_of_castles)
 void create_new_soldier(castle* source, castle* destination, soldier** soldiers, int number_of_moving_soldiers, int speed);
 
 // move soldiers and check for collisions
-void send_one_soldier(soldier* the_soldier, soldier* soldiers);
+void send_one_soldier(soldier* the_soldier, soldier* soldiers, castle** source_castles, castle** destination_castles, int number_pf_destinations);
 
 void render_soldiers(SDL_Renderer * renderer, soldier* soldiers, int number_of_moving_soldiers);
 
