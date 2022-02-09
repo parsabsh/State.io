@@ -14,12 +14,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="choose the winner done (sum bugs in AI)">
+    <list default="true" id="0c08572f-9225-4541-a7b1-3f2c6fc8cd24" name="Changes" comment="save user points done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/main.c.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/myheaders/my_map.c.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/project_parsabsh.dir/myheaders/my_map.c.obj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/project_parsabsh.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
@@ -128,7 +126,8 @@
       <workItem from="1644214877728" duration="11031000" />
       <workItem from="1644231419330" duration="15205000" />
       <workItem from="1644257134411" duration="3950000" />
-      <workItem from="1644298454895" duration="22722000" />
+      <workItem from="1644298454895" duration="23746000" />
+      <workItem from="1644391344202" duration="3631000" />
     </task>
     <task id="LOCAL-00001" summary="Background music added">
       <created>1643059043065</created>
@@ -214,7 +213,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644252513788</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="save user points done">
+      <created>1644335957966</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1644335957966</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,7 +250,8 @@
     <MESSAGE value="Movement of soldiers done (bugs fixed)" />
     <MESSAGE value="soldiers collisions done / enemies' AI done" />
     <MESSAGE value="choose the winner done (sum bugs in AI)" />
-    <option name="LAST_COMMIT_MESSAGE" value="choose the winner done (sum bugs in AI)" />
+    <MESSAGE value="save user points done" />
+    <option name="LAST_COMMIT_MESSAGE" value="save user points done" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

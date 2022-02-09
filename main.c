@@ -176,10 +176,11 @@ int main(){
                         if(destination_castle[number_of_destinations] != NULL && destination_castle[number_of_destinations]->center_x != source_castle[number_of_sources-1]->center_x){
                             is_source_selected = SDL_FALSE;
                             is_destination_selected = SDL_TRUE;
-                            if(source_castle[number_of_sources-1]->soldiers_with_destination == 0){
-                                source_castle[number_of_sources-1]->soldiers_with_destination = source_castle[number_of_sources-1]->soldiers;
-                            }else if(source_castle[number_of_sources-1]->soldiers_with_destination_2 == 0){
-                                source_castle[number_of_sources-1]->soldiers_with_destination_2 = source_castle[number_of_sources-1]->soldiers - source_castle[number_of_sources-1]->soldiers_with_destination;
+                            source_castle[number_of_sources-1]->soldiers_with_destination = source_castle[number_of_sources-1]->soldiers;
+                            for(int i=number_of_done_motions; i<number_of_sources-1; i++){
+                                if(source_castle[i] == source_castle[number_of_sources-1]){
+                                    source_castle[i] = NULL;
+                                }
                             }
                             number_of_destinations++;
                             destination_castle = realloc(destination_castle, (number_of_destinations+1) * sizeof(castle *));
@@ -199,12 +200,6 @@ int main(){
             }
             if(is_destination_selected && time % 3 == 0){
                 for(int i=number_of_done_motions; i<number_of_destinations; i++){
-                    if(source_castle[i] != NULL && source_castle[i]->soldiers_with_destination_2 > 0){
-                        create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
-                        if(source_castle[i]->soldiers_with_destination_2 == 0){
-                            number_of_done_motions++;
-                        }
-                    }
                     if(source_castle[i] != NULL && source_castle[i]->soldiers_with_destination > 0){
                         create_new_soldier(source_castle[i], destination_castle[i], &soldiers, number_of_moving_soldiers++, DEFAULT_SPEED_OF_SOLDIERS);
                         if(source_castle[i]->soldiers_with_destination == 0){

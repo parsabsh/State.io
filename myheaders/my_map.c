@@ -63,7 +63,6 @@ castle* generate_random_map(int number_of_players, int number_of_castles){
         castles[i].player = -1;
         castles[i].soldiers = START_NUMBER_OF_SOLDIERS;
         castles[i].soldiers_with_destination = 0;
-        castles[i].soldiers_with_destination_2 = 0;
         castles[i].radius = (rand()%31) + 40;
         castles[i].color = 0x88B9A8B0;
         castles[i].center_color = 0x88B3899B;
@@ -383,7 +382,6 @@ castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int
                         castles[i].player = 0;
                         castles[i].soldiers = START_NUMBER_OF_SOLDIERS;
                         castles[i].soldiers_with_destination = 0;
-                        castles[i].soldiers_with_destination_2 = 0;
                         castles[i].radius = (5*i)%31 + 40;
                         castles[i].center_x = default_x_coordinates[2*i];
                         castles[i].center_y = default_y_coordinates[2*i];
@@ -393,7 +391,6 @@ castle* show_random_map_menu(SDL_Renderer* renderer, int* number_of_players, int
                     castles[11].player = 1;
                     castles[11].soldiers = START_NUMBER_OF_SOLDIERS;
                     castles[11].soldiers_with_destination = 0;
-                    castles[11].soldiers_with_destination_2 = 0;
                     castles[11].radius = 65;
                     castles[11].center_x = default_x_coordinates[7];
                     castles[11].center_y = default_y_coordinates[7];
@@ -499,9 +496,7 @@ void create_new_soldier(castle* source, castle* destination, soldier** soldiers,
     (*soldiers)[number_of_moving_soldiers].y = source->center_y;
     (*soldiers)[number_of_moving_soldiers].speed = speed;
     (*soldiers)[number_of_moving_soldiers].player = source->player;
-    if (source->soldiers_with_destination_2 != 0) {
-        source->soldiers_with_destination_2--;
-    } else if (source->soldiers_with_destination != 0) {
+    if (source->soldiers_with_destination != 0) {
         source->soldiers_with_destination--;
     }
     source->soldiers--;
@@ -523,12 +518,8 @@ void send_one_soldier(soldier* the_soldier, soldier* soldiers, castle** source_c
                 the_soldier->destination->soldiers++;
             } else {
                 if (the_soldier->destination->soldiers != 0) {
-                    if(the_soldier->destination->soldiers == the_soldier->destination->soldiers_with_destination + the_soldier->destination->soldiers_with_destination_2){
-                        if(the_soldier->destination->soldiers_with_destination != 0)
+                    if(the_soldier->destination->soldiers_with_destination != 0)
                         the_soldier->destination->soldiers_with_destination--;
-                        else if(the_soldier->destination->soldiers_with_destination_2 != 0)
-                            the_soldier->destination->soldiers_with_destination_2--;
-                    }
                     the_soldier->destination->soldiers--;
                 }else{
                     the_soldier->destination->player = the_soldier->player;
@@ -536,7 +527,6 @@ void send_one_soldier(soldier* the_soldier, soldier* soldiers, castle** source_c
                     the_soldier->destination->center_color = the_soldier->color;
                     the_soldier->destination->soldiers = 1;
                     the_soldier->destination->soldiers_with_destination = 0;
-                    the_soldier->destination->soldiers_with_destination_2 = 0;
                     for(int i=0; i<number_pf_destinations; i++){
                         if(the_soldier->destination == source_castles[i]){
                             source_castles[i] = NULL;

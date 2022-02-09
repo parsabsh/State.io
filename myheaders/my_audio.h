@@ -1,3 +1,8 @@
+/*
+    I learned how to work with sdl_audio from this repository :
+    https://gist.github.com/armornick/3447121
+*/
+
 #include <SDL2/SDL.h>
 
 // declaration
