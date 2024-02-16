@@ -8,8 +8,6 @@ Feb. 2022 <br>
 https://user-images.githubusercontent.com/92635013/153712510-50321acf-5c62-4955-ac16-eaf1f68404da.mp4
 
 
-### Used languages:
-1) C ( 1,150 lines of code at all )
 ### Used libraries:
 1) SDL2
 2) SDL2_gfx
