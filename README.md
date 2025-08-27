@@ -1,7 +1,7 @@
 # STATE.io
 ## Project of FOP course
 This is my project of the "Fundamentals of Programming" (FOP) course at Sharif University of Technology <br>
-1st semester of B.S. (CE) <br>
+1st semester of B.Sc. (CE) <br>
 Feb. 2022 <br>
 ### This is a sample video of the game :
 
